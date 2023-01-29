@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ModalFilterComponent } from './modal-filter.component';
+import { TableRacapComponent } from './table-racap.component';
 
-describe('ModalFilterComponent', () => {
-  let component: ModalFilterComponent;
-  let fixture: ComponentFixture<ModalFilterComponent>;
+describe('TableRacapComponent', () => {
+  let component: TableRacapComponent;
+  let fixture: ComponentFixture<TableRacapComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ModalFilterComponent ]
+      declarations: [ TableRacapComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ModalFilterComponent);
+    fixture = TestBed.createComponent(TableRacapComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

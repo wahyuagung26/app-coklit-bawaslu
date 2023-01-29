@@ -1,0 +1,98 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="page-title">Rekapitulasi {{districtName}}</h1>
+        </div>
+        <div class="col-md-6">
+            <form>
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="form-group row">
+                            <label for="jenis_data" class="col-sm-4 col-form-label required">Jenis Data</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="jenis_data" id="jenis_data">
+                                    <option *ngFor="let val of votersType" value="{{val.id}}">{{val.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-right">
+                        <button class="btn btn-success">
+                            <em class="fa fa-file-excel"></em> Export Excel
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Rekap TPS
+                </div>
+                <div class="card-body">
+                    <app-table-racap></app-table-racap>                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Pemilih Baru
+                </div>
+                <div class="card-body">
+                    <app-table-racap></app-table-racap>                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Pemilih Pemula
+                </div>
+                <div class="card-body">
+                    <app-table-racap></app-table-racap>                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Belum KTP Elektronik
+                </div>
+                <div class="card-body">
+                    <app-table-racap></app-table-racap>                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Disabilitas
+                </div>
+                <div class="card-body">
+                    <app-table-racap></app-table-racap>                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Ubah Data
+                </div>
+                <div class="card-body">
+                    <app-table-racap></app-table-racap>                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    TMS
+                </div>
+                <div class="card-body">
+                    <app-recap-tms></app-recap-tms>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
