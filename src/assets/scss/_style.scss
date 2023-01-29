@@ -8,6 +8,12 @@ body[data-layout="horizontal"] .page-content {
     content: "*";
     color: red;
 }
+
+.page-title {
+    font-size: 18px;
+    color: #495057;
+    margin-bottom: 20px;
+}
 // END BODY
 
 // DATATABLE
@@ -23,12 +29,22 @@ table.dataTable thead td {
 // END DATATABLE
 
 // NAVBAR
+.header-title {
+    color: #181818;
+    font-weight: bold;
+}
+
+.header-subtitle {
+    font-size: 0.8rem;
+    color: #181818;
+}
+
 .navbar {
     padding: 0px;
 }
 
 .navbar-menu {
-    background: #009aad;
+    background: #dc3545;
     padding: 0.5rem 1rem;
 }
 
@@ -36,19 +52,25 @@ table.dataTable thead td {
     padding: 0.5rem 1rem !important;
 }
 
-.nav-link.dropdown-toggle {
+.navbar-nav .nav-link {
+    font-size: 0.8rem !important;
     color: #fff;
     font-weight: 600;
 }
 
-.navbar-nav .nav-link {
-    font-size: 0.8rem !important;
+.navbar-brand {
+    display: flex;
+    flex-direction: row;
 }
 
-.navbar-brand > img {
+.navbar-brand img {
     height: 45px;
     margin-left: 10px;
-    margin-right: 0px;
+    margin-right: 15px;
+}
+
+.navbar-brand-text span {
+    display: block;
 }
 
 .side-nav-link-ref:hover {
@@ -95,7 +117,7 @@ table.dataTable thead td {
 }
 
 .card-transparent .card-body {
-    border-top: 4px solid #009aad;
+    border-top: 4px solid #dc3545;
     background: #fff;
 }
 // END CARD

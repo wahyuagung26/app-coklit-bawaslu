@@ -1,0 +1,45 @@
+<div class="card">
+    <div class="card-body">
+        <form>
+            <div class="row">
+                <div class="col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <label for="nik">NIK</label>
+                        <input type="text" class="form-control" id="nik" placeholder="Cari NIK">
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <label for="rt">RT</label>
+                        <input type="text" class="form-control" id="rt" placeholder="Cari Berdasar RT">
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <label for="rw">RW</label>
+                        <input type="text" class="form-control" id="rw" placeholder="Cari Berdasar RW">
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <label for="tps">TPS</label>
+                        <select class="form-control" id="tps" placeholder="Cari Berdasar TPS">
+                            <option value="">Semua TPS</option>
+                            <option *ngFor="let val of listTps" value="{{val.id}}">{{val.id}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-2">
+                    <div class="form-group">
+                        <label for="button">&nbsp;</label>
+                        <div id="button">
+                            <button type="button" class="btn btn-primary mr-2"><em class="fa fa-search"></em> Cari</button>
+                            <button type="button" class="btn btn-primary mr-2"><em class="fa fa-filter"></em> Filter</button>
+                            <button type="button" class="btn btn-success"><em class="fa fa-file-excel"></em> Export</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

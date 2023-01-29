@@ -1,0 +1,14 @@
+.counter {
+    display: flex;
+    flex-direction: row;
+}
+
+.counter span {
+    flex: 1;
+}
+
+.counter.border {
+    border: none !important;
+    border-left: 1px solid #e2e2e2 !important;
+    border-right: 1px solid #e2e2e2 !important;
+}

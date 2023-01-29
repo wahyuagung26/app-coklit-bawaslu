@@ -1,0 +1,199 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="page-title">Tambah {{voterTypeName}}</h1>
+        </div>
+        <div class="col-md-12">
+            <div class="card card-transparent">
+                <div class="card-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group row">
+                                    <label for="nik" class="col-sm-4 col-form-label required">NIK</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="nik" id="nik"
+                                            placeholder="Masukkan NIK">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="no_kk" class="col-sm-4 col-form-label required">No KK</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="no_kk" id="no_kk"
+                                            placeholder="Masukkan No KK">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="nama" class="col-sm-4 col-form-label required">Nama</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="nama" id="nama"
+                                            placeholder="Masukkan Nama">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="tempat_lahir" class="col-sm-4 col-form-label required">Tempat Lahir</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir"
+                                            placeholder="Masukkan Tempat Lahir">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="tgl_lahir" class="col-sm-4 col-form-label required">Tanggal Lahir</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="tgl_lahir" id="tgl_lahir"
+                                            placeholder="Masukkan Tanggal Lahir">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="jenis_kelamin" class="col-sm-4 col-form-label required">Jenis Kelamin</label>
+                                    <div class="col-sm-8">
+                                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="jenis_kelamin">
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="L"> Laki-Laki
+                                            </label>
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="P"> Perempuan
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="status_kawin" class="col-sm-4 col-form-label required">Status Kawin</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" name="status_kawin" id="status_kawin" placeholder="Pilih Status Kawin">
+                                            <option value="">Tidak TMS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group row">
+                                    <label for="alamat" class="col-sm-4 col-form-label required">Alamat</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="alamat" id="alamat"
+                                            placeholder="Masukkan Alamat">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="rt" class="col-sm-4 col-form-label required">RT</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="rt" id="rt"
+                                            placeholder="Masukkan RT">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="rw" class="col-sm-4 col-form-label required">Rw</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="rw" id="rw"
+                                            placeholder="Masukkan RW">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="kecamatan" class="col-sm-4 col-form-label required">Kecamatan</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" name="kecamatan" id="kecamatan" placeholder="Pilih Kecamatan">
+                                            <option value="">Tidak TMS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="desa" class="col-sm-4 col-form-label required">Desa/Kelurahan</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" name="desa" id="desa" placeholder="Pilih Desa">
+                                            <option value="">Tidak TMS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="tps" class="col-sm-4 col-form-label required">TPS</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="tps" id="tps"
+                                            placeholder="Pilih TPS">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="status_coklit" class="col-sm-4 col-form-label required">Status Coklit</label>
+                                    <div class="col-sm-8">
+                                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="status_coklit"
+                                            [(ngModel)]="model.status_coklit">
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="Sudah"> Sudah
+                                            </label>
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="Belum"> Belum
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group row">
+                                    <label for="ktp_elektronik" class="col-sm-4 col-form-label required">KTP Elektronik</label>
+                                    <div class="col-sm-8">
+                                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="ktp_elektronik"
+                                            [(ngModel)]="model.ktp_elektronik">
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="Sudah"> Sudah
+                                            </label>
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="Belum"> Belum
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="pemilih_baru" class="col-sm-4 col-form-label required">Pemilih Baru</label>
+                                    <div class="col-sm-8">
+                                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="pemilih_baru"
+                                            [(ngModel)]="model.pemilih_baru">
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="Ya"> Ya
+                                            </label>
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="Bukan"> Bukan
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="pemilih_pemula" class="col-sm-4 col-form-label required">Pemilih Pemula</label>
+                                    <div class="col-sm-8">
+                                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="pemilih_pemula"
+                                            [(ngModel)]="model.pemilih_pemula">
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="Ya"> Ya
+                                            </label>
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="Bukan"> Bukan
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="tms" class="col-sm-4 col-form-label">TMS</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" name="tms" id="tms" placeholder="Pilih TMS">
+                                            <option value="">Tidak TMS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="disabilitas" class="col-sm-4 col-form-label">Disabilitas</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" name="disabilitas" id="disabilitas" placeholder="Pilih Disabilitas">
+                                            <option value="">Bukan Disabilitas</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-right">
+                    <a class="btn btn-light mr-2" [routerLink]="['/voters', voterTypeId]"><em class="fa fa-arrow-left"></em> Kembali</a>
+                    <button class="btn btn-primary"><em class="fa fa-save"></em> Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

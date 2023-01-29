@@ -4,6 +4,8 @@ import { DOCUMENT } from '@angular/common';
 
 import { AuthService } from 'src/app/feature/auth/services/auth.service';
 import { EventService } from '../../core/services/event.service';
+import { environment } from '../../../environments/environment';
+
 @Component({
     selector: 'app-horizontaltopbar',
     templateUrl: './horizontaltopbar.component.html',
@@ -17,6 +19,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     element;
     configData;
     userLogin;
+    env;
 
     constructor(
         @Inject(DOCUMENT) private document: any,
@@ -29,6 +32,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
                 this.activateMenu();
             }
         });
+        this.env = environment;
     }
 
     ngOnInit(): void {
