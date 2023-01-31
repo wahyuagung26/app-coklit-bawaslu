@@ -3,7 +3,7 @@ export const environment = {
     production: false,
     apiURL: 'http://localhost:8000/api',
     baseUrl: 'http://localhost:8000/',
-    votersType: [
+    statusData: [
         {
             id: 1,
             text: 'Data Awal'

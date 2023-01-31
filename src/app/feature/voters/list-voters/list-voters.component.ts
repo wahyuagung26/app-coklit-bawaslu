@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 export class ListVotersComponent implements OnInit {
     voterTypeId: string;
     voterTypeName: string;
-    votersType: any;
+    statusData: any;
     districtName: string;
     listTps: any;
     listTms: any;
@@ -20,13 +20,13 @@ export class ListVotersComponent implements OnInit {
     constructor(
         private activatedRoute: ActivatedRoute
     ) {
-        this.votersType = environment.votersType;
+        this.statusData = environment.statusData;
     }
 
     ngOnInit(): void {
         this.activatedRoute.params.subscribe(params => {
             this.voterTypeId = params.voterId;
-            const voter = this.votersType.filter((val) => (val.id == params.voterId));
+            const voter = this.statusData.filter((val) => (val.id == params.voterId));
             this.voterTypeName = `${voter?.[0]?.text} ` ?? `Data `;
         });
 

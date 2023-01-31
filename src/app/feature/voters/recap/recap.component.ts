@@ -9,14 +9,14 @@ import { environment } from 'src/environments/environment';
 })
 export class RecapComponent implements OnInit {
     districtName: string;
-    votersType: any;
+    statusData: any;
 
     constructor(
     ) {
     }
 
     ngOnInit(): void {
-        this.votersType = environment.votersType;
+        this.statusData = environment.statusData;
         this.districtName = 'Kelurahan Lawang';
     }
 

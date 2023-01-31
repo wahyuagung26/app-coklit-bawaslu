@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 export class FormVotersComponent implements OnInit {
     voterTypeId: string;
     voterTypeName: string;
-    votersType: any;
+    statusData: any;
     model: {
         status_coklit,
         ktp_elektronik,
@@ -21,13 +21,13 @@ export class FormVotersComponent implements OnInit {
     constructor(
         private activatedRoute: ActivatedRoute
     ) {
-        this.votersType = environment.votersType;
+        this.statusData = environment.statusData;
     }
 
     ngOnInit(): void {
         this.activatedRoute.params.subscribe(params => {
             this.voterTypeId = params.voterId;
-            const voter = this.votersType.filter((val) => (val.id == params.voterId));
+            const voter = this.statusData.filter((val) => (val.id == params.voterId));
             this.voterTypeName = `${voter?.[0]?.text} ` ?? `Data `;
         });
 
