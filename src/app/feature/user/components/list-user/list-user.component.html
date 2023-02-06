@@ -19,7 +19,9 @@
                                 </div>
                             </div>
                         </form>
-                        <button type="button" class="btn btn-sm btn-primary mr-2" *ngIf="authService.checkAccess('user.create')" (click)="createUser(formUser)">
+                        <button type="button" class="btn btn-sm btn-primary mr-2"
+                            *ngIf="authService.checkAccess('super admin|admin kecamatan|admin kabupaten')"
+                            (click)="createUser(formUser)">
                             <em class="fa fa-plus font-size-14 align-middle mr-1"></em> Tambah User
                         </button>
                     </div>
@@ -30,25 +32,29 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Email</th>
+                                <th>Username</th>
                                 <th>Telepon</th>
-                                <th></th>
+                                <th>Hak Akses</th>
+                                <th [width]="75"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let user of listUser;">
                                 <td>{{user.no}}</td>
                                 <td class="vertical-middle">{{user.name}}</td>
-                                <td class="vertical-middle">{{user.email}}</td>
+                                <td class="vertical-middle">{{user.username}}</td>
                                 <td class="vertical-middle">{{user.phone_number}}</td>
+                                <td class="vertical-middle">{{user.role}}</td>
                                 <td class="vertical-middle text-right">
                                     <a href="javascript: void(0);" class="align-middle mr-2"
                                         (click)="updateUser(formUser, user)" placement="left" container="body"
-                                        ngbTooltip="Ubah"  *ngIf="authService.checkAccess('user.update')">
+                                        ngbTooltip="Ubah"
+                                        *ngIf="authService.checkAccess('super admin|admin kecamatan|admin kabupaten')">
                                         <em class="fa fa-edit font-size-14"></em>
                                     </a>
                                     <a href="javascript: void(0);" class="align-middle" (click)="deleteUser(user.id)"
-                                        placement="left" container="body" ngbTooltip="Hapus"  *ngIf="authService.checkAccess('user.delete')">
+                                        placement="left" container="body" ngbTooltip="Hapus"
+                                        *ngIf="authService.checkAccess('super admin|admin kecamatan|admin kabupaten')">
                                         <em class="fa fa-trash font-size-14"></em>
                                     </a>
                                 </td>

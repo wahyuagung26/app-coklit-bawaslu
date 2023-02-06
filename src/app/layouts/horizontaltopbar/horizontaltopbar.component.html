@@ -45,6 +45,12 @@
     </div>
     <div class="collapse navbar-menu navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/users']" (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components"
+                    role="button">
+                    Data User
+                </a>
+            </li>
             <li class="nav-item dropdown" ngbDropdown>
                 <a class="nav-link dropdown-toggle" (click)="onMenuClick($event)" href="javascript: void(0);"
                     id="topnav-components" role="button" ngbDropdownToggle>

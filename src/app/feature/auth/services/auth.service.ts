@@ -34,14 +34,8 @@ export class AuthService extends StateService<any>{
         }
 
         const permission = access.split('|');
-        for (const val of permission) {
-            const exp = val.split('.');
-            const feature = exp?.[0] ?? '-';
-            const activity = exp?.[1] ?? '-';
-
-            if(userLogin?.access?.[feature]?.[activity] && userLogin.access[feature][activity] == true) {
-                return true;
-            }
+        if(permission.includes(userLogin.role)) {
+            return true;
         }
 
         return false;
@@ -50,9 +44,9 @@ export class AuthService extends StateService<any>{
     /**
      * Request login
      */
-    login(email, password) {
-        return this.landaService.DataPost('/v1/auth/login', {
-            email: email,
+    login(username, password) {
+        return this.landaService.DataPost('/v1/login', {
+            username: username,
             password: password
         });
     }
@@ -61,7 +55,7 @@ export class AuthService extends StateService<any>{
      * Ambil token CSRF dari server dan simpan di localStorage
      */
     saveCsrf() {
-        this.landaService.DataGet('/v1/auth/csrf').subscribe((res: any) => {
+        this.landaService.DataGet('/v1/csrf').subscribe((res: any) => {
             return new Promise((resolve, reject) => {
                 localStorage.setItem('csrf', res.data);
                 resolve(true);
@@ -108,7 +102,7 @@ export class AuthService extends StateService<any>{
      * dan simpan di RxJS
      */
     saveUserLogin() {
-        return this.landaService.DataGet('/v1/auth/profile').subscribe((res: any) => {
+        return this.landaService.DataGet('/v1/profile').subscribe((res: any) => {
             this.setState({ userLogin: res.data });
         });
     }

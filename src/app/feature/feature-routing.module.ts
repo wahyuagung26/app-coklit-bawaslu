@@ -9,7 +9,7 @@ import { RecapComponent } from './voters/recap/recap.component';
 const routes: Routes = [
     { path: '', component: DashboardComponent },
     { path: 'home', component: DashboardComponent },
-    { path: 'user', component: ListUserComponent },
+    { path: 'users', component: ListUserComponent },
     { path: 'voters/:voterId', component: ListVotersComponent },
     { path: 'add-voter/:voterId', component: FormVotersComponent },
     { path: 'recapitulation', component: RecapComponent}

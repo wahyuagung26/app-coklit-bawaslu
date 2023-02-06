@@ -15,7 +15,7 @@ import { AuthService } from '../../services/auth.service';
  */
 export class LoginComponent implements OnInit, AfterViewInit {
 
-    email: string;
+    username: string;
     password: string;
 
     constructor(
@@ -34,8 +34,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
 
     login() {
-        this.authService.login(this.email, this.password).subscribe((res: any) => {
-            this.authService.saveToken(res.data.access_token);
+        this.authService.login(this.username, this.password).subscribe((res: any) => {
+            this.authService.saveToken(res.data.token);
             this.authService.saveUserLogin();
             setTimeout(() => {
                 this.router.navigate(['/home']);

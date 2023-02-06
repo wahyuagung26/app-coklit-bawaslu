@@ -1,112 +1,142 @@
 import { Component, Input, OnInit, Output, EventEmitter, SimpleChange } from '@angular/core';
 import { LandaService } from 'src/app/core/services/landa.service';
+import { RegionService } from 'src/app/core/services/region.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
-  selector: 'app-form-user',
-  templateUrl: './form-user.component.html',
-  styleUrls: ['./form-user.component.scss']
+    selector: 'app-form-user',
+    templateUrl: './form-user.component.html',
+    styleUrls: ['./form-user.component.scss']
 })
 export class FormUserComponent implements OnInit {
-  readonly MODE_CREATE = 'add';
-  readonly MODE_UPDATE = 'update';
+    readonly MODE_CREATE = 'add';
+    readonly MODE_UPDATE = 'update';
 
-  @Input() userId: number;
-  @Output() afterSave = new EventEmitter<boolean>();
+    @Input() userId: number;
+    @Output() afterSave = new EventEmitter<boolean>();
 
-  activeMode: string;
-  roles: [];
-  formModel: {
-    id: number,
-    name: string,
-    email: string,
-    password: string,
-    phone_number: string,
-    user_roles_id: string,
-    photo: string,
-    photo_url: string
-  }
-
-  constructor(
-    private userService: UserService,
-    private landaService: LandaService
-  ) { }
-
-  ngOnInit(): void {}
-
-  ngOnChanges(changes: SimpleChange) {
-    this.resetForm();
-  }
-
-  getRoles() {
-    this.userService.getRoles().subscribe((res: any) => {
-      this.roles = res.data.list;
-    }, err => {
-      console.log(err);
-    });
-  }
-
-  getCroppedImage($event) {
-    this.formModel.photo = $event;
-  }
-
-  resetForm() {
-    this.getRoles();
-    this.formModel = {
-      id: 0,
-      name: '',
-      email: '',
-      password: '',
-      phone_number: '',
-      user_roles_id: '',
-      photo: '',
-      photo_url: '',
+    activeMode: string;
+    roles: any;
+    districts: any;
+    villages: any;
+    formModel: {
+        id: number,
+        name: string,
+        username: string,
+        password: string,
+        phone_number: string,
+        role: string,
+        districts_id: string,
+        villages_id: string
     }
 
-    if (this.userId > 0) {
-      this.activeMode = this.MODE_UPDATE;
-      this.getUser(this.userId);
-      return true;
+    constructor(
+        private userService: UserService,
+        private landaService: LandaService,
+        private regionService: RegionService
+    ) { }
+
+    ngOnInit(): void { }
+
+    ngOnChanges(changes: SimpleChange) {
+        this.resetForm();
+        this.getDistricts();
     }
 
-    this.activeMode = this.MODE_CREATE;
-  }
-
-  getUser(userId) {
-    this.userService.getUserById(userId).subscribe((res: any) => {
-      this.formModel = res.data;
-    }, err => {
-      console.log(err);
-    });
-  }
-
-  save() {
-    switch (this.activeMode) {
-      case this.MODE_CREATE:
-        this.insert();
-        break;
-      case this.MODE_UPDATE:
-        this.update();
-        break;
+    getRoles() {
+        this.roles = [
+            {
+                'id': 'super sdmin',
+                'name': 'Super Admin',
+            },
+            {
+                'id': 'admin kabupaten',
+                'name': 'Admin Kabupaten'
+            },
+            {
+                'id': 'admin kecamatan',
+                'name': 'Admin Kecamatan'
+            },
+            {
+                'id': 'admin desa',
+                'name': 'Admin Desa'
+            },
+        ];
     }
-  }
 
-  insert() {
-    this.userService.createUser(this.formModel).subscribe((res: any) => {
-      this.landaService.alertSuccess('Berhasil', res.message);
-      this.afterSave.emit();
-    }, err => {
-      this.landaService.alertError('Mohon Maaf', err.error.errors);
-    });
-  }
+    resetForm() {
+        this.getRoles();
+        this.formModel = {
+            id: 0,
+            name: '',
+            username: '',
+            password: '',
+            phone_number: '',
+            role: '',
+            districts_id: '',
+            villages_id: ''
+        }
 
-  update() {
-    this.userService.updateUser(this.formModel).subscribe((res: any) => {
-      this.landaService.alertSuccess('Berhasil', res.message);
-      this.afterSave.emit();
-    }, err => {
-      this.landaService.alertError('Mohon Maaf', err.error.errors);
-    });
-  }
+        if (this.userId > 0) {
+            this.activeMode = this.MODE_UPDATE;
+            this.getUser(this.userId);
+            return true;
+        }
+
+        this.activeMode = this.MODE_CREATE;
+    }
+
+    getUser(userId) {
+        this.userService.getUserById(userId).subscribe((res: any) => {
+            this.formModel = res.data;
+        }, err => {
+            console.log(err);
+        });
+    }
+
+    getDistricts() {
+        this.regionService.getDistricts().subscribe((res: any) => {
+            this.districts = res.data;
+        }, err => {
+            console.log(err);
+        });
+    }
+
+    getVillages(districtsId) {
+        this.regionService.getVillages(districtsId).subscribe((res: any) => {
+            this.villages = res.data;
+        }, err => {
+            console.log(err);
+        });
+    }
+
+    save() {
+        switch (this.activeMode) {
+            case this.MODE_CREATE:
+                this.insert();
+                break;
+            case this.MODE_UPDATE:
+                this.update();
+                break;
+        }
+    }
+
+    insert() {
+        this.userService.createUser(this.formModel).subscribe((res: any) => {
+            this.landaService.alertSuccess('Berhasil', res.message);
+            this.afterSave.emit();
+        }, err => {
+            this.landaService.alertError('Mohon Maaf', err.error.errors);
+        });
+    }
+
+    update() {
+        this.userService.updateUser(this.formModel).subscribe((res: any) => {
+            this.landaService.alertSuccess('Berhasil', res.message);
+            this.afterSave.emit();
+        }, err => {
+            this.landaService.alertError('Mohon Maaf', err.error.errors);
+        });
+    }
 
 }

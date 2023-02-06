@@ -1,8 +1,8 @@
 
 export const environment = {
     production: false,
-    apiURL: 'http://localhost:8000/api',
-    baseUrl: 'http://localhost:8000/',
+    apiURL: 'http://svc-bawaslu.test/api',
+    baseUrl: 'http://svc-bawaslu.test/',
     statusData: [
         {
             id: 1,

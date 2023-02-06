@@ -1,10 +1,4 @@
 <form>
-    <div class="form-group row mt-3">
-        <div class="col-md-4"></div>
-        <div class="col-md-4"><app-upload-image [defaultImage]="formModel.photo_url" [ratioHigh]="4" [ratioWidth]="3" (onSubmit)="getCroppedImage($event)"></app-upload-image></div>
-        <div class="col-md-4"></div>
-    </div>
-    <hr>
     <div class="form-group row">
         <label class="col-md-4 required">Nama</label>
         <div class="col-md-8">
@@ -13,14 +7,14 @@
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-md-4 required">Email</label>
+        <label class="col-md-4 required">Username</label>
         <div class="col-md-8">
-            <input [(ngModel)]="formModel.email" type="email" name="email" class="form-control"
-                placeholder="Email Pengguna">
+            <input [(ngModel)]="formModel.username" type="text" name="username" class="form-control"
+                placeholder="Username Pengguna">
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-md-4">Phone Number</label>
+        <label class="col-md-4">No. Telepon / HP</label>
         <div class="col-md-8">
             <input [(ngModel)]="formModel.phone_number" type="text" name="phone_number" class="form-control"
                 placeholder="No Telepon">
@@ -37,13 +31,27 @@
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-md-4">Status</label>
+        <label class="col-md-4 required">Hak Akses</label>
         <div class="col-md-8">
-            <div class="btn-group btn-group-toggle" ngbRadioGroup name="user_roles_id" [(ngModel)]="formModel.user_roles_id">
-                <label ngbButtonLabel class="btn-primary" *ngFor="let role of roles;">
-                    <input ngbButton type="radio" value="{{role.id}}"> {{role.name}}
-                </label>
-            </div>
+            <select class="form-control" name="role" [(ngModel)]="formModel.role">
+                <option *ngFor="let role of roles;" value="{{role.id}}">{{role.name}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row" *ngIf="formModel.role == 'admin desa' || formModel.role == 'admin kecamatan'">
+        <label class="col-md-4 required">Kecamatan</label>
+        <div class="col-md-8">
+            <select class="form-control" name="districts_id" [(ngModel)]="formModel.districts_id">
+                <option *ngFor="let district of districts;" value="{{district.id}}">{{district.district_name}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row" *ngIf="formModel.role == 'admin desa'">
+        <label class="col-md-4 required">Desa / Kelurahan</label>
+        <div class="col-md-8">
+            <select class="form-control" name="villages_id" [(ngModel)]="formModel.villages_id">
+                <option *ngFor="let village of villages;" value="{{village.id}}">{{village.name}}</option>
+            </select>
         </div>
     </div>
     <div class="form-group row">
