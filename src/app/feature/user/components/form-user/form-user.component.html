@@ -41,7 +41,7 @@
     <div class="form-group row" *ngIf="formModel.role == 'admin desa' || formModel.role == 'admin kecamatan'">
         <label class="col-md-4 required">Kecamatan</label>
         <div class="col-md-8">
-            <select class="form-control" name="district_id" [(ngModel)]="formModel.district_id">
+            <select class="form-control" name="district_id" [(ngModel)]="formModel.district_id" (change)="getVillages(formModel.district_id)">
                 <option *ngFor="let district of districts;" value="{{district.id}}">{{district.district_name}}</option>
             </select>
         </div>

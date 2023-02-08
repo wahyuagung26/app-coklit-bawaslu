@@ -89,7 +89,7 @@
                     <div>
                         <ngx-datatable class="datatable material" columnMode="force" [scrollbarH]="true"
                             [scrollbarV]="false" [rows]="listVoters" [headerHeight]="50" [footerHeight]="50"
-                            [rowHeight]="'auto'" [externalPaging]="true" [count]="page.total_item" [offset]="page.page"
+                            [rowHeight]="'auto'" [externalPaging]="true" [count]="page.total_item" [offset]="page.page - 1"
                             [limit]="page.per_page" (page)="fetchData($event)">
 
                             <ngx-datatable-column [sortable]="false" name="NIK" [width]="180" [frozenLeft]="true"

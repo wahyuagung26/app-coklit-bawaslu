@@ -22,6 +22,10 @@ export class VotersService extends LandaService {
         return this.DataGet(`/v1/voters/${statusDataId}/coklit/${villageId}`);
     }
 
+    save(statusDataId, payload) {
+        return this.DataPost(`/v1/voters/${statusDataId}`, payload);
+    }
+
     getDisabilities() {
         return [
             {
@@ -65,6 +69,10 @@ export class VotersService extends LandaService {
 
     getListTms() {
         return [
+            {
+                id: 0,
+                name: 'Bukan TMS'
+            },
             {
                 id: 1,
                 name: 'Tidak Dikenal'

@@ -89,7 +89,7 @@ export class ListVotersComponent implements OnInit {
 
         this.authService.getProfile().subscribe((user: any) => {
             this.userLogin = user;
-            console.log(this.userLogin);
+
             this.setDistrict(user.district_id, user.district_name);
             this.setVillage(user.village_id, user.village_name);
         });
