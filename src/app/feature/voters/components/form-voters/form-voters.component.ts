@@ -8,8 +8,8 @@ import { environment } from 'src/environments/environment';
     styleUrls: ['./form-voters.component.scss']
 })
 export class FormVotersComponent implements OnInit {
-    voterTypeId: string;
-    voterTypeName: string;
+    StatusDataId: string;
+    StatusDataName: string;
     statusData: any;
     model: {
         status_coklit,
@@ -26,9 +26,9 @@ export class FormVotersComponent implements OnInit {
 
     ngOnInit(): void {
         this.activatedRoute.params.subscribe(params => {
-            this.voterTypeId = params.voterId;
+            this.StatusDataId = params.voterId;
             const voter = this.statusData.filter((val) => (val.id == params.voterId));
-            this.voterTypeName = `${voter?.[0]?.text} ` ?? `Data `;
+            this.StatusDataName = `${voter?.[0]?.text} ` ?? `Data `;
         });
 
         this.resetValue();

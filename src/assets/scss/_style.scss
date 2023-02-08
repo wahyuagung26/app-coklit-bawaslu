@@ -26,6 +26,15 @@ table.dataTable thead td {
     padding: 0em !important;
     padding-left: 0em !important;
 }
+td a {
+    color: #5c5c5c;
+}
+.page-item.active .page-link {
+    z-index: 3;
+    color: #C62828;
+    background-color: #fff;
+    border-color: #C62828;
+}
 // END DATATABLE
 
 // NAVBAR
@@ -85,6 +94,11 @@ table.dataTable thead td {
     font-size: 20px;
 }
 
+.navbar-expand-lg .navbar-nav .nav-link {
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+
 @media (min-width: 992px) {
     .navbar-expand-lg {
         flex-flow: wrap;
@@ -97,6 +111,9 @@ table.dataTable thead td {
 .table .thead-light {
     background-color: #f8f9fa;
     font-weight: 600;
+}
+.ngx-datatable.material {
+    box-shadow: none;
 }
 // END TABEL
 

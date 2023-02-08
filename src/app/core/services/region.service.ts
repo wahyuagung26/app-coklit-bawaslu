@@ -11,6 +11,6 @@ export class RegionService extends LandaService {
     }
 
     getVillages(districtsId, arrParameter = {}) {
-        return this.DataGet(`/v1/districts/${districtsId}`, arrParameter);
+        return this.DataGet(`/v1/districts/${districtsId}/villages`, arrParameter);
     }
 }

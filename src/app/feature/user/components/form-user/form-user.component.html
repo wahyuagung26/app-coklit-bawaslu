@@ -41,7 +41,7 @@
     <div class="form-group row" *ngIf="formModel.role == 'admin desa' || formModel.role == 'admin kecamatan'">
         <label class="col-md-4 required">Kecamatan</label>
         <div class="col-md-8">
-            <select class="form-control" name="districts_id" [(ngModel)]="formModel.districts_id">
+            <select class="form-control" name="district_id" [(ngModel)]="formModel.district_id">
                 <option *ngFor="let district of districts;" value="{{district.id}}">{{district.district_name}}</option>
             </select>
         </div>
@@ -49,8 +49,8 @@
     <div class="form-group row" *ngIf="formModel.role == 'admin desa'">
         <label class="col-md-4 required">Desa / Kelurahan</label>
         <div class="col-md-8">
-            <select class="form-control" name="villages_id" [(ngModel)]="formModel.villages_id">
-                <option *ngFor="let village of villages;" value="{{village.id}}">{{village.name}}</option>
+            <select class="form-control" name="village_id" [(ngModel)]="formModel.village_id">
+                <option *ngFor="let village of villages;" value="{{village.id}}">{{village.village_name}}</option>
             </select>
         </div>
     </div>

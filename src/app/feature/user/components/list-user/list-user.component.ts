@@ -63,8 +63,8 @@ export class ListUserComponent implements OnInit {
                     this.listUser = data;
 
                     callback({
-                        recordsTotal: meta.total_item,
-                        recordsFiltered: meta.total_item,
+                        recordsTotal: meta.total,
+                        recordsFiltered: meta.total,
                         data: [],
                     });
 

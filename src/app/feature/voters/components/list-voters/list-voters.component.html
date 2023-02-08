@@ -1,0 +1,454 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="page-title">{{statusDataName}} {{districtName}}</h1>
+        </div>
+        <div class="col-md-6 text-right">
+            <a class="btn btn-primary" id="btn-add" [routerLink]="['/add-voter', statusDataId]"><em
+                    class="fa fa-plus"></em> Tambah Pemilih</a>
+        </div>
+        <div class="col-md-12" *ngIf="statusDataId == 1">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 counter">
+                            <span>Total Jumlah Pemilih</span>
+                            <span class="text-right font-weight-bold">{{(totalCoklit + totalUnCoklit) | number}}</span>
+                        </div>
+                        <div class="col-md-4 counter border">
+                            <span>Sudah Coklit</span>
+                            <span class="text-right text-success font-weight-bold">{{totalCoklit | number}}</span>
+                        </div>
+                        <div class="col-md-4 counter">
+                            <span>Belum Coklit</span>
+                            <span class="text-right text-danger font-weight-bold">{{totalUnCoklit | number}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-2 col-sm-2">
+                                <div class="form-group">
+                                    <label for="nik">NIK</label>
+                                    <input type="text" class="form-control" id="nik" [(ngModel)]="filter.nik" name="nik"
+                                        placeholder="Cari NIK">
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <div class="form-group">
+                                    <label for="rt">RT</label>
+                                    <input type="text" class="form-control" id="rt" [(ngModel)]="filter.rt" name="rt"
+                                        placeholder="Cari Berdasar RT">
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <div class="form-group">
+                                    <label for="rw">RW</label>
+                                    <input type="text" class="form-control" id="rw" [(ngModel)]="filter.rw" name="rw"
+                                        placeholder="Cari Berdasar RW">
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <div class="form-group">
+                                    <label for="tps">TPS</label>
+                                    <select class="form-control" id="tps" [(ngModel)]="filter.tps" name="tps"
+                                        placeholder="Cari Berdasar TPS">
+                                        <option value="">Semua TPS</option>
+                                        <option *ngFor="let val of listTps" value="{{val.id}}">{{val.id}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-2">
+                                <div class="form-group">
+                                    <label for="button">&nbsp;</label>
+                                    <div id="button">
+                                        <button type="button" class="btn btn-primary mr-2"
+                                            (click)="fetchData({offset: 0})"><em class="fa fa-search"></em>
+                                            Cari</button>
+                                        <button type="button" class="btn btn-primary mr-2"
+                                            (click)="openModal(modalFilter)"><em class="fa fa-filter"></em>
+                                            Filter</button>
+                                        <button type="button" class="btn btn-success"><em class="fa fa-file-excel"></em>
+                                            Export</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card card-transparent">
+                <div class="card-body">
+                    <div>
+                        <ngx-datatable class="datatable material" columnMode="force" [scrollbarH]="true"
+                            [scrollbarV]="false" [rows]="listVoters" [headerHeight]="50" [footerHeight]="50"
+                            [rowHeight]="'auto'" [externalPaging]="true" [count]="page.total_item" [offset]="page.page"
+                            [limit]="page.per_page" (page)="fetchData($event)">
+
+                            <ngx-datatable-column [sortable]="false" name="NIK" [width]="180" [frozenLeft]="true"
+                                prop="nik">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                    let-row="row">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-nik'] = true"
+                                        *ngIf="!editing[rowIndex + '-nik']">
+                                        {{ value }}
+                                    </span>
+                                    <input (blur)="updateProfile($event, 'nik', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-nik']" type="text" class="form-control"
+                                        [value]="value" />
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="No KK" [width]="180" [frozenLeft]="true"
+                                prop="nkk">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                    let-row="row">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-nkk'] = true"
+                                        *ngIf="!editing[rowIndex + '-nkk']">
+                                        {{ value }}
+                                    </span>
+                                    <input (blur)="updateProfile($event, 'nkk', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-nkk']" type="text" class="form-control"
+                                        [value]="value" />
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="Nama" [width]="240" [frozenLeft]="true"
+                                prop="name">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                    let-row="row">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-name'] = true"
+                                        *ngIf="!editing[rowIndex + '-name']">
+                                        {{ value }}
+                                    </span>
+                                    <input (blur)="updateProfile($event, 'name', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-name']" type="text" class="form-control"
+                                        [value]="value" />
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="Tempat Lahir" prop="place_of_birth">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                    let-row="row">
+                                    <span title="Double click to edit"
+                                        (click)="editing[rowIndex + '-place_of_birth'] = true"
+                                        *ngIf="!editing[rowIndex + '-place_of_birth']">
+                                        {{ value }}
+                                    </span>
+                                    <input (blur)="updateProfile($event, 'place_of_birth', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-place_of_birth']" type="text" class="form-control"
+                                        [value]="value" />
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="Tanggal Lahir" prop="date_of_birth">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                    let-row="row">
+                                    <span title="Double click to edit"
+                                        (click)="editing[rowIndex + '-date_of_birth'] = true"
+                                        *ngIf="!editing[rowIndex + '-date_of_birth']">
+                                        {{ value }}
+                                    </span>
+                                    <input (blur)="updateProfile($event, 'date_of_birth', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-date_of_birth']" type="text" class="form-control"
+                                        [value]="value" />
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="Jenis Kelamin" prop="gender">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                    let-row="row">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-gender'] = true"
+                                        *ngIf="!editing[rowIndex + '-gender']">
+                                        {{ value }}
+                                    </span>
+                                    <select (change)="updateProfile($event, 'gender', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-gender']" class="form-control"
+                                        name="gender[{{rowIndex}}]">
+                                        <option value="Laki-Laki" selected="{{'Laki-Laki' == value ? 'selected' : ''}}">
+                                            Laki-Laki</option>
+                                        <option value="Perempuan" selected="{{'Perempuan' == value ? 'selected' : ''}}">
+                                            Perempuan</option>
+                                    </select>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="Status Perkawinan" prop="married_status">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                    let-row="row">
+                                    <span title="Double click to edit"
+                                        (click)="editing[rowIndex + '-married_status'] = true"
+                                        *ngIf="!editing[rowIndex + '-married_status']">
+                                        {{ value }}
+                                    </span>
+                                    <select (change)="updateProfile($event, 'married_status', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-married_status']" class="form-control"
+                                        name="married_status[{{rowIndex}}]">
+                                        <option value="Sudah Kawin"
+                                            selected="{{'Sudah Kawin' == value ? 'selected' : ''}}">Sudah Kawin</option>
+                                        <option value="Belum Kawin"
+                                            selected="{{'Belum Kawin' == value ? 'selected' : ''}}">Belum Kawin</option>
+                                    </select>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="Alamat" prop="address">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                    let-row="row">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-address'] = true"
+                                        *ngIf="!editing[rowIndex + '-address']">
+                                        {{ value }}
+                                    </span>
+                                    <input (blur)="updateProfile($event, 'address', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-address']" type="text" class="form-control"
+                                        [value]="value" />
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="RT" prop="rt">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                    let-row="row">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-rt'] = true"
+                                        *ngIf="!editing[rowIndex + '-rt']">
+                                        {{ value }}
+                                    </span>
+                                    <input (blur)="updateProfile($event, 'rt', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-rt']" type="text" class="form-control"
+                                        [value]="value" />
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="RW" prop="rw">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                    let-row="row">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-rw'] = true"
+                                        *ngIf="!editing[rowIndex + '-rw']">
+                                        {{ value }}
+                                    </span>
+                                    <input (blur)="updateProfile($event, 'rw', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-rw']" type="text" class="form-control"
+                                        [value]="value" />
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="Desa" prop="village_name">
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="Kecamatan" prop="district_name">
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="TPS" [width]="100" prop="tps">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                    let-value="value">
+                                    <select (change)="updateStatus($event, 'tps', rowIndex)" class="form-control"
+                                        name="tps[{{rowIndex}}]">
+                                        <option value="{{val.id}}" *ngFor="let val of listTps"
+                                            selected="{{val.id == value ? 'selected' : ''}}">{{val.id}}</option>
+                                    </select>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="TMS" [width]="200" prop="tms">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                    let-value="value">
+                                    <select (change)="updateStatus($event, 'tms', rowIndex)" class="form-control"
+                                        name="tms[rowIndex]">
+                                        <option value="{{val.id}}" *ngFor="let val of listTms"
+                                            selected="{{val.id == value ? 'selected' : ''}}">{{val.name}}</option>
+                                    </select>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" *ngIf="statusDataId == 1" name="Coklit" prop="is_coklit">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                    let-value="value">
+                                    <div class="form-check">
+                                        <input (change)="updateCheckbox($event, 'is_coklit', rowIndex)" type="checkbox"
+                                            checked="{{value ? 'checked' : ''}}" id="is_coklit[{{rowIndex}}]" value="1"
+                                            name="is_coklit[{{rowIndex}}]" class="form-check-input" />
+                                        <label class="form-check-label" for="is_coklit[{{rowIndex}}]">
+                                            Sudah
+                                        </label>
+                                    </div>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="KTP EL" prop="is_ktp_el">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                    let-value="value">
+                                    <div class="form-check">
+                                        <input (change)="updateCheckbox($event, 'is_ktp_el', rowIndex)" type="checkbox"
+                                            checked="{{value ? '' : 'checked'}}" id="ktp_el[{{rowIndex}}]"
+                                            name="ktp_el[{{rowIndex}}]" class="form-check-input" id="ktp_el" />
+                                        <label class="form-check-label" for="ktp_el[{{rowIndex}}]">
+                                            Belum
+                                        </label>
+                                    </div>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="Pemilih Baru" prop="is_new_voter">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                    let-value="value">
+                                    <div class="form-check">
+                                        <input (change)="updateCheckbox($event, 'is_new_voter', rowIndex)"
+                                            type="checkbox" checked="{{value ? 'checked' : ''}}"
+                                            name="pemilih_baru[{{rowIndex}}]" id="pemilih_baru[{{rowIndex}}]"
+                                            class="form-check-input" />
+                                        <label class="form-check-label" for="pemilih_baru[{{rowIndex}}]">
+                                            Ya
+                                        </label>
+                                    </div>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="Pemilih Pemula" prop="is_novice_voter">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                    let-value="value">
+                                    <div class="form-check">
+                                        <input (change)="updateCheckbox($event, 'is_novice_voter', rowIndex)"
+                                            type="checkbox" checked="{{value ? 'checked' : ''}}"
+                                            name="pemilih_pemula[{{rowIndex}}]" class="form-check-input"
+                                            id="pemilih_pemula[{{rowIndex}}]" />
+                                        <label class="form-check-label" for="pemilih_pemula[{{rowIndex}}]">
+                                            Ya
+                                        </label>
+                                    </div>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="Disabilitas" prop="disabilities">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                    let-value="value">
+                                    <select (change)="updateStatus($event, 'disabilities', rowIndex)"
+                                        class="form-control" name="coklit[{{rowIndex}}]">
+                                        <option value="{{val.id}}" *ngFor="let val of listDisabilitas"
+                                            selected="{{val.id == value ? 'selected' : ''}}">{{val.name}}
+                                        </option>
+                                    </select>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="Ubah Data" prop="is_profile_updated">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                    let-value="value">
+                                    <span class="text-warning text-bold" *ngIf="value">U</span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column [sortable]="false" name="Status" [width]="80" prop="is_checked">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                    let-value="value">
+                                    <div class="form-check">
+                                        <input (change)="updateCheckbox($event, 'is_checked', rowIndex)" type="checkbox"
+                                            checked="{{value ? 'checked' : ''}}" name="status_pengecekan[{{rowIndex}}]"
+                                            class="form-check-input" id="status_pengecekan[{{rowIndex}}]" />
+                                    </div>
+                                </ng-template>
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #modalFilter let-modal class="full-height">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Filter</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <label for="status_kawin">Status Perkawinan</label>
+                <select class="form-control" id="status_kawin" [(ngModel)]="filter.married_status"
+                    name="married_status">
+                    <option value="">- All Status -</option>
+                    <option value="{{val.id}}" *ngFor="let val of listMarried">
+                        {{val.name}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status_coklit">Status Coklit</label>
+                <select class="form-control" id="status_coklit" [(ngModel)]="filter.is_coklit" name="is_coklit">
+                    <option value="">- All Status -</option>
+                    <option value="{{val.id}}" *ngFor="let val of listBoolean">
+                        {{val.name}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="pemilih_baru">Pemilih Baru</label>
+                <select class="form-control" id="pemilih_baru" [(ngModel)]="filter.is_new_voter" name="is_new_voter">
+                    <option value="">- All Status -</option>
+                    <option value="{{val.id}}" *ngFor="let val of listBoolean">
+                        {{val.name}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="pemilih_pemula">Pemilih Pemula</label>
+                <select class="form-control" id="pemilih_pemula" [(ngModel)]="filter.is_novice_voter"
+                    name="is_novice_voter">
+                    <option value="">- All Status -</option>
+                    <option value="{{val.id}}" *ngFor="let val of listBoolean">
+                        {{val.name}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tms">TMS</label>
+                <select class="form-control" id="tms" [(ngModel)]="filter.tms" name="tms">
+                    <option value="">- All Status -</option>
+                    <option value="{{val.id}}" *ngFor="let val of listTms">
+                        {{val.name}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="disabilitas">Disabilitas</label>
+                <select class="form-control" id="disabilitas" [(ngModel)]="filter.disabilities" name="disabilities">
+                    <option value="">- All Status -</option>
+                    <option value="{{val.id}}" *ngFor="let val of listDisabilitas">
+                        {{val.name}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="perubahan_data">Perubahan Data</label>
+                <select class="form-control" id="perubahan_data" [(ngModel)]="filter.is_profile_updated"
+                    name="is_profile_updated">
+                    <option value="">- All Status -</option>
+                    <option value="{{val.id}}" *ngFor="let val of listBoolean">
+                        {{val.name}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status_pengecekan">Status Pengecekan</label>
+                <select class="form-control" id="status_pengecekan" [(ngModel)]="filter.is_checked" name="is_checked">
+                    <option value="">- All Status -</option>
+                    <option value="{{val.id}}" *ngFor="let val of listBoolean">
+                        {{val.name}}
+                    </option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Save click')">Tutup</button>
+        <button type="button" class="btn btn-primary" (click)="fetchData({offset: 0})">Terapkan</button>
+    </div>
+</ng-template>

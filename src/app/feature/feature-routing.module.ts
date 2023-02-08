@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ListUserComponent } from './user/components/list-user/list-user.component';
-import { FormVotersComponent } from './voters/form-voters/form-voters.component';
-import { ListVotersComponent } from './voters/list-voters/list-voters.component';
+import { FormVotersComponent } from './voters/components/form-voters/form-voters.component';
+import { ListVotersComponent } from './voters/components/list-voters/list-voters.component';
 import { RecapComponent } from './voters/recap/recap.component';
 
 const routes: Routes = [

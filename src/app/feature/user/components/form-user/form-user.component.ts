@@ -26,8 +26,8 @@ export class FormUserComponent implements OnInit {
         password: string,
         phone_number: string,
         role: string,
-        districts_id: string,
-        villages_id: string
+        district_id: string,
+        village_id: string
     }
 
     constructor(
@@ -46,7 +46,7 @@ export class FormUserComponent implements OnInit {
     getRoles() {
         this.roles = [
             {
-                'id': 'super sdmin',
+                'id': 'super admin',
                 'name': 'Super Admin',
             },
             {
@@ -73,8 +73,8 @@ export class FormUserComponent implements OnInit {
             password: '',
             phone_number: '',
             role: '',
-            districts_id: '',
-            villages_id: ''
+            district_id: '',
+            village_id: ''
         }
 
         if (this.userId > 0) {
@@ -89,6 +89,9 @@ export class FormUserComponent implements OnInit {
     getUser(userId) {
         this.userService.getUserById(userId).subscribe((res: any) => {
             this.formModel = res.data;
+            if(this.formModel.district_id) {
+                this.getVillages(this.formModel.district_id);
+            }
         }, err => {
             console.log(err);
         });

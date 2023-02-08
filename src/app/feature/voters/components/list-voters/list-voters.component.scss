@@ -1,3 +1,42 @@
+#table-list-voter th,
+#table-list-voter td {
+	min-width: 100px;
+}
+
+#table-list-voter thead th {
+	background: #f6f6f6;
+}
+
+#table-list-voter tbody td {
+	background: #fbfbfb;
+}
+
+#btn-add {
+	margin-top: -10px;
+}
+
+ngx-datatable {
+	// max-height: 70vh;
+	overflow-y: scroll;
+}
+
+.ngx-datatable .datatable-body .datatable-body-row > div {
+	background: #fff;
+}
+
+.ngx-datatable .datatable-row-left,
+.ngx-datatable .datatable-row-right {
+	background: white !important;
+}
+
+.datatable {
+	// height: calc(100vh - 110px);
+}
+
+.text-bold {
+    font-weight: bolder;
+}
+
 .modal-title {
     text-transform: capitalize;
 }
@@ -87,4 +126,19 @@ body.modal-open .content-body {
     .modal-content.full-height .modal-footer {
         position: fixed;
     }
+}
+
+.counter {
+    display: flex;
+    flex-direction: row;
+}
+
+.counter span {
+    flex: 1;
+}
+
+.counter.border {
+    border: none !important;
+    border-left: 1px solid #e2e2e2 !important;
+    border-right: 1px solid #e2e2e2 !important;
 }
