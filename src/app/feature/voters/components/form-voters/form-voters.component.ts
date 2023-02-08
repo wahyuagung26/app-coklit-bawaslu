@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LandaService } from 'src/app/core/services/landa.service';
 import { RegionService } from 'src/app/core/services/region.service';
+import { AuthService } from 'src/app/feature/auth/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { VotersService } from '../../services/voters.service';
 
@@ -19,6 +20,7 @@ export class FormVotersComponent implements OnInit {
     listDisabilitas: any;
     districts: any;
     villages: any;
+    userLogin: any;
     formModel: {
         nik,
         nkk,
@@ -47,7 +49,8 @@ export class FormVotersComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private votersService: VotersService,
         private regionService: RegionService,
-        private landaService: LandaService
+        private landaService: LandaService,
+        private authService: AuthService
     ) {
         this.statusData = environment.statusData;
     }
@@ -57,6 +60,13 @@ export class FormVotersComponent implements OnInit {
             this.statusDataId = params.voterId;
             const voter = this.statusData.filter((val) => (val.id == params.voterId));
             this.statusDataName = `${voter?.[0]?.text} ` ?? `Data `;
+        });
+
+        this.authService.getProfile().subscribe((user: any) => {
+            this.userLogin = user;
+            if (this.userLogin.district_id) {
+                this.getVillages(this.userLogin.district_id);
+            }
         });
 
         this.resetValue();
@@ -82,8 +92,8 @@ export class FormVotersComponent implements OnInit {
             disabilities: '0',
             tps: '1',
             tms: '0',
-            district_id:'',
-            village_id:'',
+            district_id: this.userLogin?.district_id ?? '',
+            village_id: this.userLogin?.village_id ?? '',
             is_coklit: '1',
             is_ktp_el: '1',
             is_new_voter: '1',

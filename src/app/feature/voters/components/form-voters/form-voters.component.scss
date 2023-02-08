@@ -13,3 +13,7 @@
 .card-footer {
     border-top: 1px solid #eee;
 }
+
+.form-control:disabled, .form-control[readonly] {
+    background-color: #f4f4f4;
+}

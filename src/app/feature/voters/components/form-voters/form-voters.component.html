@@ -8,7 +8,7 @@
                 <div class="card-body">
                     <form>
                         <div class="row">
-                            <div class="col-md-4 col-sm-12">
+                            <div class="col-md-6 col-md-4 col-sm-12">
                                 <div class="form-group row">
                                     <label for="nik" class="col-sm-4 col-form-label required">NIK</label>
                                     <div class="col-sm-8">
@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-12">
+                            <div class="col-md-6 col-md-4 col-sm-12">
                                 <div class="form-group row">
                                     <label for="address" class="col-sm-4 col-form-label required">Alamat</label>
                                     <div class="col-sm-8">
@@ -105,8 +105,8 @@
                                     <div class="col-sm-8">
                                         <select class="form-control" name="district_id"
                                             [(ngModel)]="formModel.district_id"
-                                            (change)="getVillages(formModel.district_id)">
-                                            <option *ngFor="let district of districts;" value="{{district.id}}">
+                                            (change)="getVillages(formModel.district_id)" disabled="{{userLogin.role == 'admin desa' || userLogin.role == 'admin kecamatan'}}">
+                                            <option *ngFor="let district of districts;" value="{{district.id}}" selected="{{userLogin?.district_id == district.id ? 'selected' : ''}}">
                                                 {{district.district_name}}</option>
                                         </select>
                                     </div>
@@ -115,8 +115,8 @@
                                     <label for="desa" class="col-sm-4 col-form-label required">Desa/Kelurahan</label>
                                     <div class="col-sm-8">
                                         <select class="form-control" name="village_id"
-                                            [(ngModel)]="formModel.village_id">
-                                            <option *ngFor="let village of villages;" value="{{village.id}}">
+                                            [(ngModel)]="formModel.village_id" disabled="{{userLogin.role == 'admin desa'}}">
+                                            <option *ngFor="let village of villages;" value="{{village.id}}" selected="{{userLogin?.village_id == village.id ? 'selected' : ''}}">
                                                 {{village.village_name}}</option>
                                         </select>
                                     </div>
@@ -146,7 +146,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-12">
+                            <div class="col-md-6 col-md-4 col-sm-12">
                                 <div class="form-group row">
                                     <label for="ktp_elektronik" class="col-sm-4 col-form-label required">KTP
                                         Elektronik</label>

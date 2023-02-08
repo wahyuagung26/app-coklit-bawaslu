@@ -142,3 +142,16 @@ body.modal-open .content-body {
     border-left: 1px solid #e2e2e2 !important;
     border-right: 1px solid #e2e2e2 !important;
 }
+
+.form-control:disabled, .form-control[readonly] {
+    background-color: #f4f4f4;
+}
+
+#footer {
+    background: #DAB96B;
+    position: fixed;
+    bottom: 0px;
+    padding: 15px;
+    right: 0px;
+    width: 100%;
+}

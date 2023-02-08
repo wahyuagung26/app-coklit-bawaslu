@@ -7,6 +7,11 @@
             <a class="btn btn-primary" id="btn-add" [routerLink]="['/add-voter', statusDataId]"><em
                     class="fa fa-plus"></em> Tambah Pemilih</a>
         </div>
+        <div class="col-md-12" *ngIf="userLogin?.role != 'admin desa'">
+            <div class="alert alert-warning">
+                Hanya <b>Admin Desa/Kelurahan</b> yang dapat melakukan perubahan data Pemilih
+            </div>
+        </div>
         <div class="col-md-12" *ngIf="statusDataId == 1">
             <div class="card">
                 <div class="card-body">
@@ -71,7 +76,8 @@
                                             (click)="fetchData({offset: 0})"><em class="fa fa-search"></em>
                                             Cari</button>
                                         <button type="button" class="btn btn-primary mr-2"
-                                            (click)="openModal(modalFilter)"><em class="fa fa-filter"></em>
+                                            (click)="openModal(modalFilter, 'right full-height')"><em
+                                                class="fa fa-filter"></em>
                                             Filter</button>
                                         <button type="button" class="btn btn-success"><em class="fa fa-file-excel"></em>
                                             Export</button>
@@ -89,20 +95,25 @@
                     <div>
                         <ngx-datatable class="datatable material" columnMode="force" [scrollbarH]="true"
                             [scrollbarV]="false" [rows]="listVoters" [headerHeight]="50" [footerHeight]="50"
-                            [rowHeight]="'auto'" [externalPaging]="true" [count]="page.total_item" [offset]="page.page - 1"
-                            [limit]="page.per_page" (page)="fetchData($event)">
+                            [rowHeight]="'auto'" [externalPaging]="true" [count]="page.total_item"
+                            [offset]="page.page - 1" [limit]="page.per_page" (page)="fetchData($event)">
 
                             <ngx-datatable-column [sortable]="false" name="NIK" [width]="180" [frozenLeft]="true"
                                 prop="nik">
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
                                     let-row="row">
-                                    <span title="Double click to edit" (click)="editing[rowIndex + '-nik'] = true"
-                                        *ngIf="!editing[rowIndex + '-nik']">
+                                    <span *ngIf="userLogin.role != 'admin desa'">
                                         {{ value }}
                                     </span>
-                                    <input (blur)="updateProfile($event, 'nik', rowIndex)"
-                                        *ngIf="editing[rowIndex + '-nik']" type="text" class="form-control"
-                                        [value]="value" />
+                                    <div class="inline-edit" *ngIf="userLogin.role == 'admin desa'">
+                                        <span title="Double click to edit" (click)="editing[rowIndex + '-nik'] = true"
+                                            *ngIf="!editing[rowIndex + '-nik']">
+                                            {{ value }}
+                                        </span>
+                                        <input (blur)="updateProfile($event, 'nik', rowIndex)"
+                                            *ngIf="editing[rowIndex + '-nik']" type="text" class="form-control"
+                                            [value]="value" />
+                                    </div>
                                 </ng-template>
                             </ngx-datatable-column>
 
@@ -110,13 +121,18 @@
                                 prop="nkk">
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
                                     let-row="row">
-                                    <span title="Double click to edit" (click)="editing[rowIndex + '-nkk'] = true"
-                                        *ngIf="!editing[rowIndex + '-nkk']">
+                                    <span *ngIf="userLogin.role != 'admin desa'">
                                         {{ value }}
                                     </span>
-                                    <input (blur)="updateProfile($event, 'nkk', rowIndex)"
-                                        *ngIf="editing[rowIndex + '-nkk']" type="text" class="form-control"
-                                        [value]="value" />
+                                    <div class="inline-edit" *ngIf="userLogin.role == 'admin desa'">
+                                        <span title="Double click to edit" (click)="editing[rowIndex + '-nkk'] = true"
+                                            *ngIf="!editing[rowIndex + '-nkk']">
+                                            {{ value }}
+                                        </span>
+                                        <input (blur)="updateProfile($event, 'nkk', rowIndex)"
+                                            *ngIf="editing[rowIndex + '-nkk']" type="text" class="form-control"
+                                            [value]="value" />
+                                    </div>
                                 </ng-template>
                             </ngx-datatable-column>
 
@@ -124,117 +140,163 @@
                                 prop="name">
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
                                     let-row="row">
-                                    <span title="Double click to edit" (click)="editing[rowIndex + '-name'] = true"
-                                        *ngIf="!editing[rowIndex + '-name']">
+                                    <span title="Double click to edit">
                                         {{ value }}
                                     </span>
-                                    <input (blur)="updateProfile($event, 'name', rowIndex)"
-                                        *ngIf="editing[rowIndex + '-name']" type="text" class="form-control"
-                                        [value]="value" />
+                                    <div class="inline-edit" *ngIf="userLogin.role == 'admin desa'">
+                                        <span title="Double click to edit" (click)="editing[rowIndex + '-name'] = true"
+                                            *ngIf="!editing[rowIndex + '-name']">
+                                            {{ value }}
+                                        </span>
+                                        <input (blur)="updateProfile($event, 'name', rowIndex)"
+                                            *ngIf="editing[rowIndex + '-name']" type="text" class="form-control"
+                                            [value]="value" />
+                                    </div>
                                 </ng-template>
                             </ngx-datatable-column>
 
                             <ngx-datatable-column [sortable]="false" name="Tempat Lahir" prop="place_of_birth">
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
                                     let-row="row">
-                                    <span title="Double click to edit"
-                                        (click)="editing[rowIndex + '-place_of_birth'] = true"
-                                        *ngIf="!editing[rowIndex + '-place_of_birth']">
+                                    <span *ngIf="userLogin.role != 'admin desa'">
                                         {{ value }}
                                     </span>
-                                    <input (blur)="updateProfile($event, 'place_of_birth', rowIndex)"
-                                        *ngIf="editing[rowIndex + '-place_of_birth']" type="text" class="form-control"
-                                        [value]="value" />
+                                    <div class="inline-edit" *ngIf="userLogin.role == 'admin desa'">
+                                        <span title="Double click to edit"
+                                            (click)="editing[rowIndex + '-place_of_birth'] = true"
+                                            *ngIf="!editing[rowIndex + '-place_of_birth']">
+                                            {{ value }}
+                                        </span>
+                                        <input (blur)="updateProfile($event, 'place_of_birth', rowIndex)"
+                                            *ngIf="editing[rowIndex + '-place_of_birth']" type="text"
+                                            class="form-control" [value]="value" />
+                                    </div>
                                 </ng-template>
                             </ngx-datatable-column>
 
                             <ngx-datatable-column [sortable]="false" name="Tanggal Lahir" prop="date_of_birth">
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
                                     let-row="row">
-                                    <span title="Double click to edit"
-                                        (click)="editing[rowIndex + '-date_of_birth'] = true"
-                                        *ngIf="!editing[rowIndex + '-date_of_birth']">
+                                    <span *ngIf="userLogin.role != 'admin desa'">
                                         {{ value }}
                                     </span>
-                                    <input (blur)="updateProfile($event, 'date_of_birth', rowIndex)"
-                                        *ngIf="editing[rowIndex + '-date_of_birth']" type="text" class="form-control"
-                                        [value]="value" />
+                                    <div class="inline-edit" *ngIf="userLogin.role == 'admin desa'">
+                                        <span title="Double click to edit"
+                                            (click)="editing[rowIndex + '-date_of_birth'] = true"
+                                            *ngIf="!editing[rowIndex + '-date_of_birth']">
+                                            {{ value }}
+                                        </span>
+                                        <input (blur)="updateProfile($event, 'date_of_birth', rowIndex)"
+                                            *ngIf="editing[rowIndex + '-date_of_birth']" type="text"
+                                            class="form-control" [value]="value" />
+                                    </div>
                                 </ng-template>
                             </ngx-datatable-column>
 
                             <ngx-datatable-column [sortable]="false" name="Jenis Kelamin" prop="gender">
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
                                     let-row="row">
-                                    <span title="Double click to edit" (click)="editing[rowIndex + '-gender'] = true"
-                                        *ngIf="!editing[rowIndex + '-gender']">
+                                    <span *ngIf="userLogin.role != 'admin desa'">
                                         {{ value }}
                                     </span>
-                                    <select (change)="updateProfile($event, 'gender', rowIndex)"
-                                        *ngIf="editing[rowIndex + '-gender']" class="form-control"
-                                        name="gender[{{rowIndex}}]">
-                                        <option value="Laki-Laki" selected="{{'Laki-Laki' == value ? 'selected' : ''}}">
-                                            Laki-Laki</option>
-                                        <option value="Perempuan" selected="{{'Perempuan' == value ? 'selected' : ''}}">
-                                            Perempuan</option>
-                                    </select>
+                                    <div class="inline-edit" *ngIf="userLogin.role == 'admin desa'">
+                                        <span title="Double click to edit"
+                                            (click)="editing[rowIndex + '-gender'] = true"
+                                            *ngIf="!editing[rowIndex + '-gender']">
+                                            {{ value }}
+                                        </span>
+                                        <select (change)="updateProfile($event, 'gender', rowIndex)"
+                                            *ngIf="editing[rowIndex + '-gender']" class="form-control"
+                                            name="gender[{{rowIndex}}]">
+                                            <option value="Laki-Laki"
+                                                selected="{{'Laki-Laki' == value ? 'selected' : ''}}">
+                                                Laki-Laki</option>
+                                            <option value="Perempuan"
+                                                selected="{{'Perempuan' == value ? 'selected' : ''}}">
+                                                Perempuan</option>
+                                        </select>
+                                    </div>
                                 </ng-template>
                             </ngx-datatable-column>
 
                             <ngx-datatable-column [sortable]="false" name="Status Perkawinan" prop="married_status">
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
                                     let-row="row">
-                                    <span title="Double click to edit"
-                                        (click)="editing[rowIndex + '-married_status'] = true"
-                                        *ngIf="!editing[rowIndex + '-married_status']">
+                                    <span *ngIf="userLogin.role != 'admin desa'">
                                         {{ value }}
                                     </span>
-                                    <select (change)="updateProfile($event, 'married_status', rowIndex)"
-                                        *ngIf="editing[rowIndex + '-married_status']" class="form-control"
-                                        name="married_status[{{rowIndex}}]">
-                                        <option value="Sudah Kawin"
-                                            selected="{{'Sudah Kawin' == value ? 'selected' : ''}}">Sudah Kawin</option>
-                                        <option value="Belum Kawin"
-                                            selected="{{'Belum Kawin' == value ? 'selected' : ''}}">Belum Kawin</option>
-                                    </select>
+                                    <div class="inline-edit" *ngIf="userLogin.role == 'admin desa'">
+                                        <span title="Double click to edit"
+                                            (click)="editing[rowIndex + '-married_status'] = true"
+                                            *ngIf="!editing[rowIndex + '-married_status']">
+                                            {{ value }}
+                                        </span>
+                                        <select (change)="updateProfile($event, 'married_status', rowIndex)"
+                                            *ngIf="editing[rowIndex + '-married_status']" class="form-control"
+                                            name="married_status[{{rowIndex}}]">
+                                            <option value="Sudah Kawin"
+                                                selected="{{'Sudah Kawin' == value ? 'selected' : ''}}">Sudah Kawin
+                                            </option>
+                                            <option value="Belum Kawin"
+                                                selected="{{'Belum Kawin' == value ? 'selected' : ''}}">Belum Kawin
+                                            </option>
+                                        </select>
+                                    </div>
                                 </ng-template>
                             </ngx-datatable-column>
 
                             <ngx-datatable-column [sortable]="false" name="Alamat" prop="address">
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
                                     let-row="row">
-                                    <span title="Double click to edit" (click)="editing[rowIndex + '-address'] = true"
-                                        *ngIf="!editing[rowIndex + '-address']">
+                                    <span *ngIf="userLogin.role != 'admin desa'">
                                         {{ value }}
                                     </span>
-                                    <input (blur)="updateProfile($event, 'address', rowIndex)"
-                                        *ngIf="editing[rowIndex + '-address']" type="text" class="form-control"
-                                        [value]="value" />
+                                    <div class="inline-edit" *ngIf="userLogin.role == 'admin desa'">
+                                        <span title="Double click to edit"
+                                            (click)="editing[rowIndex + '-address'] = true"
+                                            *ngIf="!editing[rowIndex + '-address']">
+                                            {{ value }}
+                                        </span>
+                                        <input (blur)="updateProfile($event, 'address', rowIndex)"
+                                            *ngIf="editing[rowIndex + '-address']" type="text" class="form-control"
+                                            [value]="value" />
+                                    </div>
                                 </ng-template>
                             </ngx-datatable-column>
 
                             <ngx-datatable-column [sortable]="false" name="RT" prop="rt">
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
                                     let-row="row">
-                                    <span title="Double click to edit" (click)="editing[rowIndex + '-rt'] = true"
-                                        *ngIf="!editing[rowIndex + '-rt']">
+                                    <span *ngIf="userLogin.role != 'admin desa'">
                                         {{ value }}
                                     </span>
-                                    <input (blur)="updateProfile($event, 'rt', rowIndex)"
-                                        *ngIf="editing[rowIndex + '-rt']" type="text" class="form-control"
-                                        [value]="value" />
+                                    <div class="inline-edit" *ngIf="userLogin.role == 'admin desa'">
+                                        <span title="Double click to edit" (click)="editing[rowIndex + '-rt'] = true"
+                                            *ngIf="!editing[rowIndex + '-rt']">
+                                            {{ value }}
+                                        </span>
+                                        <input (blur)="updateProfile($event, 'rt', rowIndex)"
+                                            *ngIf="editing[rowIndex + '-rt']" type="text" class="form-control"
+                                            [value]="value" />
+                                    </div>
                                 </ng-template>
                             </ngx-datatable-column>
 
                             <ngx-datatable-column [sortable]="false" name="RW" prop="rw">
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
                                     let-row="row">
-                                    <span title="Double click to edit" (click)="editing[rowIndex + '-rw'] = true"
-                                        *ngIf="!editing[rowIndex + '-rw']">
+                                    <span *ngIf="userLogin.role != 'admin desa'">
                                         {{ value }}
                                     </span>
-                                    <input (blur)="updateProfile($event, 'rw', rowIndex)"
-                                        *ngIf="editing[rowIndex + '-rw']" type="text" class="form-control"
-                                        [value]="value" />
+                                    <div class="inline-edit" *ngIf="userLogin.role == 'admin desa'">
+                                        <span title="Double click to edit" (click)="editing[rowIndex + '-rw'] = true"
+                                            *ngIf="!editing[rowIndex + '-rw']">
+                                            {{ value }}
+                                        </span>
+                                        <input (blur)="updateProfile($event, 'rw', rowIndex)"
+                                            *ngIf="editing[rowIndex + '-rw']" type="text" class="form-control"
+                                            [value]="value" />
+                                    </div>
                                 </ng-template>
                             </ngx-datatable-column>
 
@@ -248,7 +310,7 @@
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
                                     let-value="value">
                                     <select (change)="updateStatus($event, 'tps', rowIndex)" class="form-control"
-                                        name="tps[{{rowIndex}}]">
+                                        name="tps[{{rowIndex}}]" disabled="{{userLogin.role !== 'admin desa'}}">
                                         <option value="{{val.id}}" *ngFor="let val of listTps"
                                             selected="{{val.id == value ? 'selected' : ''}}">{{val.id}}</option>
                                     </select>
@@ -259,20 +321,22 @@
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
                                     let-value="value">
                                     <select (change)="updateStatus($event, 'tms', rowIndex)" class="form-control"
-                                        name="tms[rowIndex]">
+                                        name="tms[rowIndex]" disabled="{{userLogin.role !== 'admin desa'}}">
                                         <option value="{{val.id}}" *ngFor="let val of listTms"
                                             selected="{{val.id == value ? 'selected' : ''}}">{{val.name}}</option>
                                     </select>
                                 </ng-template>
                             </ngx-datatable-column>
 
-                            <ngx-datatable-column [sortable]="false" *ngIf="statusDataId == 1" name="Coklit" prop="is_coklit">
+                            <ngx-datatable-column [sortable]="false" *ngIf="statusDataId == 1" name="Coklit"
+                                prop="is_coklit">
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
                                     let-value="value">
                                     <div class="form-check">
                                         <input (change)="updateCheckbox($event, 'is_coklit', rowIndex)" type="checkbox"
                                             checked="{{value ? 'checked' : ''}}" id="is_coklit[{{rowIndex}}]" value="1"
-                                            name="is_coklit[{{rowIndex}}]" class="form-check-input" />
+                                            name="is_coklit[{{rowIndex}}]" class="form-check-input"
+                                            disabled="{{userLogin.role !== 'admin desa'}}" />
                                         <label class="form-check-label" for="is_coklit[{{rowIndex}}]">
                                             Sudah
                                         </label>
@@ -286,7 +350,8 @@
                                     <div class="form-check">
                                         <input (change)="updateCheckbox($event, 'is_ktp_el', rowIndex)" type="checkbox"
                                             checked="{{value ? '' : 'checked'}}" id="ktp_el[{{rowIndex}}]"
-                                            name="ktp_el[{{rowIndex}}]" class="form-check-input" id="ktp_el" />
+                                            name="ktp_el[{{rowIndex}}]" class="form-check-input" id="ktp_el"
+                                            disabled="{{userLogin.role !== 'admin desa'}}" />
                                         <label class="form-check-label" for="ktp_el[{{rowIndex}}]">
                                             Belum
                                         </label>
@@ -301,7 +366,7 @@
                                         <input (change)="updateCheckbox($event, 'is_new_voter', rowIndex)"
                                             type="checkbox" checked="{{value ? 'checked' : ''}}"
                                             name="pemilih_baru[{{rowIndex}}]" id="pemilih_baru[{{rowIndex}}]"
-                                            class="form-check-input" />
+                                            class="form-check-input" disabled="{{userLogin.role !== 'admin desa'}}" />
                                         <label class="form-check-label" for="pemilih_baru[{{rowIndex}}]">
                                             Ya
                                         </label>
@@ -316,7 +381,8 @@
                                         <input (change)="updateCheckbox($event, 'is_novice_voter', rowIndex)"
                                             type="checkbox" checked="{{value ? 'checked' : ''}}"
                                             name="pemilih_pemula[{{rowIndex}}]" class="form-check-input"
-                                            id="pemilih_pemula[{{rowIndex}}]" />
+                                            id="pemilih_pemula[{{rowIndex}}]"
+                                            disabled="{{userLogin.role !== 'admin desa'}}" />
                                         <label class="form-check-label" for="pemilih_pemula[{{rowIndex}}]">
                                             Ya
                                         </label>
@@ -328,7 +394,8 @@
                                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
                                     let-value="value">
                                     <select (change)="updateStatus($event, 'disabilities', rowIndex)"
-                                        class="form-control" name="coklit[{{rowIndex}}]">
+                                        class="form-control" name="coklit[{{rowIndex}}]"
+                                        disabled="{{userLogin.role !== 'admin desa'}}">
                                         <option value="{{val.id}}" *ngFor="let val of listDisabilitas"
                                             selected="{{val.id == value ? 'selected' : ''}}">{{val.name}}
                                         </option>
@@ -349,7 +416,8 @@
                                     <div class="form-check">
                                         <input (change)="updateCheckbox($event, 'is_checked', rowIndex)" type="checkbox"
                                             checked="{{value ? 'checked' : ''}}" name="status_pengecekan[{{rowIndex}}]"
-                                            class="form-check-input" id="status_pengecekan[{{rowIndex}}]" />
+                                            class="form-check-input" id="status_pengecekan[{{rowIndex}}]"
+                                            disabled="{{userLogin.role !== 'admin desa'}}" />
                                     </div>
                                 </ng-template>
                             </ngx-datatable-column>
@@ -360,6 +428,37 @@
         </div>
     </div>
 </div>
+
+<div id="footer" *ngIf="userLogin.role == 'admin desa'">
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button class="btn btn-primary" (click)="openModal(modalConfirm)">
+                <em class="fa fa-save"></em>&nbsp;
+                Setorkan Data
+            </button>
+        </div>
+    </div>
+</div>
+
+<ng-template #modalConfirm let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Peringatan</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>Pastikan semua data telah benar. Setelah anda menyetorkan {{statusDataName}}, maka data tersebut tidak dapat
+            diubah lagi</p>
+        <p>Yakin ingin melanjutkan ?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Save click')">Batalkan</button>
+        <button type="button" class="btn btn-primary" (click)="fetchData({offset: 0})"><em class="fa fa-key"></em>&nbsp;
+            Lanjut Setor dan Kunci Data
+            Pemilih</button>
+    </div>
+</ng-template>
 
 <ng-template #modalFilter let-modal class="full-height">
     <div class="modal-header">

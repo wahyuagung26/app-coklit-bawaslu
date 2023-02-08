@@ -4,6 +4,8 @@ import { environment } from 'src/environments/environment';
 import { VotersService } from '../../services/voters.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RegionService } from 'src/app/core/services/region.service';
+import { LandaService } from 'src/app/core/services/landa.service';
 
 @Component({
     selector: 'app-list-voters',
@@ -60,7 +62,9 @@ export class ListVotersComponent implements OnInit {
         private router: Router,
         private votersService: VotersService,
         private authService: AuthService,
-        private modalService: NgbModal
+        private modalService: NgbModal,
+        private regionService: RegionService,
+        private landaService: LandaService
     ) {
         this.statusData = environment.statusData;
         this.page = {
@@ -122,12 +126,12 @@ export class ListVotersComponent implements OnInit {
         }
     }
 
-    openModal(content) {
-        this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: 'right full-height' });
+    openModal(content, windowClass = '') {
+        this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: windowClass });
     }
 
     getSummaries() {
-        if(this.statusDataId > 1) return false;
+        if (this.statusDataId > 1) return false;
 
         this.votersService.getCoklitSummary(this.statusDataId, this.villageId ?? 0).subscribe((res: any) => {
             this.totalCoklit = res.data.total_coklit;
@@ -219,6 +223,14 @@ export class ListVotersComponent implements OnInit {
             if (cell == 'is_coklit') {
                 this.getSummaries();
             }
+        });
+    }
+
+    saveAndLock() {
+        this.regionService.lockVoters(this.villageId, this.statusDataId).subscribe((res: any) => {
+            this.landaService.alertSuccess('Berhasil', res.message);
+        }, res => {
+            this.landaService.alertError('Gagal', res.error.errors);
         });
     }
 
