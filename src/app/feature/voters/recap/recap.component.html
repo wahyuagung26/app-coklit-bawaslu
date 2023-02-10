@@ -1,36 +1,73 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-6">
-            <h1 class="page-title">Rekapitulasi {{districtName}}</h1>
+        <div class="col-md-12">
+            <h1 class="page-title">Rekapitulasi {{statusDataName}} - Desa/Kelurahan {{villageName}} Kec.
+                {{districtName}}</h1>
         </div>
-        <div class="col-md-6">
-            <form>
-                <div class="row">
-                    <div class="col-md-9">
-                        <div class="form-group row">
-                            <label for="jenis_data" class="col-sm-4 col-form-label required">Jenis Data</label>
-                            <div class="col-sm-8">
-                                <select class="form-control" name="jenis_data" id="jenis_data">
-                                    <option *ngFor="let val of statusData" value="{{val.id}}">{{val.text}}</option>
-                                </select>
+        <div class="col-md-12">
+            <div class="card card-transparent">
+                <div class="card-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-3">
+                                <div class="form-group">
+                                    <label for="jenis_data">Jenis Data</label>
+                                    <select class="form-control" [(ngModel)]="filter.status_data_id"
+                                        name="status_data_id" id="jenis_data">
+                                        <option *ngFor="let val of statusData" value="{{val.id}}">{{val.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3" *ngIf="userLogin?.role !== 'admin desa'">
+                                <div class="form-group">
+                                    <label for="district_id">Kecamatan</label>
+                                    <select class="form-control" [(ngModel)]="filter.district_id" name="district_id"
+                                        id="district_id"
+                                        disabled="{{userLogin?.role == 'admin kecamatan' ? 'disabled' : ''}}">
+                                        <option *ngFor="let val of districts" value="{{val.id}}">{{val.district_name}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3" *ngIf="userLogin?.role !== 'admin desa'">
+                                <div class="form-group">
+                                    <label for="village_id">Desa</label>
+                                    <select class="form-control" [(ngModel)]="filter.village_id" name="village_id"
+                                        id="village_id">
+                                        <option *ngFor="let val of villages" value="{{val.id}}">{{val.village_name}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="button">&nbsp;</label>
+                                    <div id="button">
+                                        <button type="button" class="btn btn-primary mr-2"
+                                            (click)="getRecap(); getStatusData()">
+                                            <em class="fa fa-search"></em>
+                                            Cari
+                                        </button>
+                                        <button class="btn btn-success">
+                                            <em class="fa fa-file-excel"></em>
+                                            Export
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <button class="btn btn-success">
-                            <em class="fa fa-file-excel"></em> Export Excel
-                        </button>
-                    </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
                     Rekap TPS
                 </div>
-                <div class="card-body">
-                    <app-table-racap></app-table-racap>                    
+                <div class="card-body p-0">
+                    <app-table-racap [user]="userLogin" [list]="summaries" [maleFieldName]="'voter_m'"
+                        [femaleFieldName]="'voter_f'"></app-table-racap>
                 </div>
             </div>
         </div>
@@ -39,8 +76,9 @@
                 <div class="card-header">
                     Pemilih Baru
                 </div>
-                <div class="card-body">
-                    <app-table-racap></app-table-racap>                    
+                <div class="card-body p-0">
+                    <app-table-racap [user]="userLogin" [list]="summaries" [maleFieldName]="'new_voter_m'"
+                        [femaleFieldName]="'new_voter_f'"></app-table-racap>
                 </div>
             </div>
         </div>
@@ -49,8 +87,9 @@
                 <div class="card-header">
                     Pemilih Pemula
                 </div>
-                <div class="card-body">
-                    <app-table-racap></app-table-racap>                    
+                <div class="card-body p-0">
+                    <app-table-racap [user]="userLogin" [list]="summaries" [maleFieldName]="'novice_voter_m'"
+                        [femaleFieldName]="'novice_voter_f'"></app-table-racap>
                 </div>
             </div>
         </div>
@@ -59,8 +98,9 @@
                 <div class="card-header">
                     Belum KTP Elektronik
                 </div>
-                <div class="card-body">
-                    <app-table-racap></app-table-racap>                    
+                <div class="card-body p-0">
+                    <app-table-racap [user]="userLogin" [list]="summaries" [maleFieldName]="'ktp_el_m'"
+                        [femaleFieldName]="'ktp_el_f'"></app-table-racap>
                 </div>
             </div>
         </div>
@@ -69,8 +109,9 @@
                 <div class="card-header">
                     Disabilitas
                 </div>
-                <div class="card-body">
-                    <app-table-racap></app-table-racap>                    
+                <div class="card-body p-0">
+                    <app-table-racap [user]="userLogin" [list]="summaries" [maleFieldName]="'disabilities_m'"
+                        [femaleFieldName]="'disabilities_f'"></app-table-racap>
                 </div>
             </div>
         </div>
@@ -79,8 +120,9 @@
                 <div class="card-header">
                     Ubah Data
                 </div>
-                <div class="card-body">
-                    <app-table-racap></app-table-racap>                    
+                <div class="card-body p-0">
+                    <app-table-racap [user]="userLogin" [list]="summaries" [maleFieldName]="'profile_updated_m'"
+                        [femaleFieldName]="'profile_updated_f'"></app-table-racap>
                 </div>
             </div>
         </div>
@@ -89,8 +131,8 @@
                 <div class="card-header">
                     TMS
                 </div>
-                <div class="card-body">
-                    <app-recap-tms></app-recap-tms>                    
+                <div class="card-body p-0">
+                    <app-recap-tms [user]="userLogin" [list]="summaries"></app-recap-tms>
                 </div>
             </div>
         </div>

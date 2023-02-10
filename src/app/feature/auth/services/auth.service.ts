@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StateService } from 'src/app/core/services/state.service';
-import { LandaService } from '../../../core/services/landa.service'
+import { CoreService } from '../../../core/services/core.service'
 
 const initialState = {
     userLogin: {
@@ -19,7 +19,7 @@ const initialState = {
 export class AuthService extends StateService<any>{
     userLogin: Observable<any> = this.select(state => state.userLogin);
 
-    constructor(private landaService: LandaService) {
+    constructor(private coreService: CoreService) {
         super(initialState);
     }
 
@@ -34,7 +34,7 @@ export class AuthService extends StateService<any>{
         }
 
         const permission = access.split('|');
-        if(permission.includes(userLogin.role)) {
+        if (permission.includes(userLogin.role)) {
             return true;
         }
 
@@ -45,7 +45,7 @@ export class AuthService extends StateService<any>{
      * Request login
      */
     login(username, password) {
-        return this.landaService.DataPost('/v1/login', {
+        return this.coreService.DataPost('/v1/login', {
             username: username,
             password: password
         });
@@ -55,7 +55,7 @@ export class AuthService extends StateService<any>{
      * Ambil token CSRF dari server dan simpan di localStorage
      */
     saveCsrf() {
-        this.landaService.DataGet('/v1/csrf').subscribe((res: any) => {
+        this.coreService.DataGet('/v1/csrf').subscribe((res: any) => {
             return new Promise((resolve, reject) => {
                 localStorage.setItem('csrf', res.data);
                 resolve(true);
@@ -98,12 +98,29 @@ export class AuthService extends StateService<any>{
     }
 
     /**
+     * 
+     * Ambil detail user dari local storage
+     */
+    getUser() {
+        const user = localStorage.getItem('user');
+        if (user) {
+            return JSON.parse(user);
+        }
+
+        return '';
+    }
+
+    /**
      * Ambil user yang login ke server
      * dan simpan di RxJS
      */
     saveUserLogin() {
-        return this.landaService.DataGet('/v1/profile').subscribe((res: any) => {
+        return this.coreService.DataGet('/v1/profile').subscribe((res: any) => {
+            /**
+             * @todo remove setState
+             */
             this.setState({ userLogin: res.data });
+            localStorage.setItem('user', JSON.stringify(res.data));
         });
     }
 
@@ -112,7 +129,7 @@ export class AuthService extends StateService<any>{
     */
     saveToken(payload: any) {
         return new Promise((resolve, reject) => {
-            localStorage.setItem('user', payload);
+            localStorage.setItem('token', payload);
             resolve(true);
         });
     }
@@ -122,7 +139,7 @@ export class AuthService extends StateService<any>{
      */
     removeToken() {
         return new Promise((resolve, reject) => {
-            localStorage.removeItem('user');
+            localStorage.removeItem('token');
             resolve(true);
         });
     }
@@ -131,7 +148,7 @@ export class AuthService extends StateService<any>{
      * Ambil token user dari localstorage
      */
     getToken() {
-        const token = localStorage.getItem('user');
+        const token = localStorage.getItem('token');
         if (token) {
             return token;
         }

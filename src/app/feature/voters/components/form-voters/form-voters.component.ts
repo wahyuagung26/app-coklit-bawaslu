@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LandaService } from 'src/app/core/services/landa.service';
+import { CoreService } from 'src/app/core/services/core.service';
 import { RegionService } from 'src/app/core/services/region.service';
 import { AuthService } from 'src/app/feature/auth/services/auth.service';
 import { environment } from 'src/environments/environment';
@@ -49,7 +49,7 @@ export class FormVotersComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private votersService: VotersService,
         private regionService: RegionService,
-        private landaService: LandaService,
+        private coreService: CoreService,
         private authService: AuthService
     ) {
         this.statusData = environment.statusData;
@@ -105,10 +105,10 @@ export class FormVotersComponent implements OnInit {
 
     save() {
         this.votersService.save(this.statusDataId, this.formModel).subscribe((res: any) => {
-            this.landaService.alertSuccess('Berhasil', res.data.message);
+            this.coreService.alertSuccess('Berhasil', res.data.message);
             this.resetValue();
         }, res => {
-            this.landaService.alertError('Gagal', res.error.errors);
+            this.coreService.alertError('Gagal', res.error.errors);
         })
     }
 

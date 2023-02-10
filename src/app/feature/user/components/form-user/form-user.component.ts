@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter, SimpleChange } from '@angular/core';
-import { LandaService } from 'src/app/core/services/landa.service';
+import { CoreService } from 'src/app/core/services/core.service';
 import { RegionService } from 'src/app/core/services/region.service';
+import { AuthService } from 'src/app/feature/auth/services/auth.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -17,6 +18,7 @@ export class FormUserComponent implements OnInit {
 
     activeMode: string;
     roles: any;
+    userLogin: any;
     districts: any;
     villages: any;
     formModel: {
@@ -32,9 +34,12 @@ export class FormUserComponent implements OnInit {
 
     constructor(
         private userService: UserService,
-        private landaService: LandaService,
-        private regionService: RegionService
-    ) { }
+        private coreService: CoreService,
+        private regionService: RegionService,
+        private authService: AuthService
+    ) {
+        this.userLogin = this.authService.getUser();
+    }
 
     ngOnInit(): void { }
 
@@ -44,24 +49,49 @@ export class FormUserComponent implements OnInit {
     }
 
     getRoles() {
-        this.roles = [
-            {
-                'id': 'super admin',
-                'name': 'Super Admin',
-            },
-            {
-                'id': 'admin kabupaten',
-                'name': 'Admin Kabupaten'
-            },
-            {
-                'id': 'admin kecamatan',
-                'name': 'Admin Kecamatan'
-            },
-            {
-                'id': 'admin desa',
-                'name': 'Admin Desa'
-            },
-        ];
+        if (this.userLogin?.role == 'super admin') {
+            this.roles = [
+                {
+                    'id': 'super admin',
+                    'name': 'Super Admin',
+                },
+                {
+                    'id': 'admin kabupaten',
+                    'name': 'Admin Kabupaten'
+                },
+                {
+                    'id': 'admin kecamatan',
+                    'name': 'Admin Kecamatan'
+                },
+                {
+                    'id': 'admin desa',
+                    'name': 'Admin Desa'
+                },
+            ];
+        }
+
+        if (this.userLogin?.role == 'admin kabupaten') {
+            this.roles = [
+                {
+                    'id': 'admin kecamatan',
+                    'name': 'Admin Kecamatan'
+                },
+                {
+                    'id': 'admin desa',
+                    'name': 'Admin Desa'
+                },
+            ];
+        }
+
+        if (this.userLogin?.role == 'admin kecamatan') {
+            this.roles = [
+                {
+                    'id': 'admin desa',
+                    'name': 'Admin Desa'
+                },
+            ];
+        }
+
     }
 
     resetForm() {
@@ -72,9 +102,9 @@ export class FormUserComponent implements OnInit {
             username: '',
             password: '',
             phone_number: '',
-            role: '',
-            district_id: '',
-            village_id: ''
+            role: 'admin desa',
+            district_id: this.userLogin?.district_id ?? 0,
+            village_id: this.userLogin?.village_id ?? 0
         }
 
         if (this.userId > 0) {
@@ -89,7 +119,7 @@ export class FormUserComponent implements OnInit {
     getUser(userId) {
         this.userService.getUserById(userId).subscribe((res: any) => {
             this.formModel = res.data;
-            if(this.formModel.district_id) {
+            if (this.formModel.district_id) {
                 this.getVillages(this.formModel.district_id);
             }
         }, err => {
@@ -100,6 +130,10 @@ export class FormUserComponent implements OnInit {
     getDistricts() {
         this.regionService.getDistricts().subscribe((res: any) => {
             this.districts = res.data;
+
+            if (this.userLogin?.district_id) {
+                this.getVillages(this.userLogin.district_id);
+            }
         }, err => {
             console.log(err);
         });
@@ -126,19 +160,19 @@ export class FormUserComponent implements OnInit {
 
     insert() {
         this.userService.createUser(this.formModel).subscribe((res: any) => {
-            this.landaService.alertSuccess('Berhasil', res.message);
+            this.coreService.alertSuccess('Berhasil', res.message);
             this.afterSave.emit();
         }, err => {
-            this.landaService.alertError('Mohon Maaf', err.error.errors);
+            this.coreService.alertError('Mohon Maaf', err.error.errors);
         });
     }
 
     update() {
         this.userService.updateUser(this.formModel).subscribe((res: any) => {
-            this.landaService.alertSuccess('Berhasil', res.message);
+            this.coreService.alertSuccess('Berhasil', res.message);
             this.afterSave.emit();
         }, err => {
-            this.landaService.alertError('Mohon Maaf', err.error.errors);
+            this.coreService.alertError('Mohon Maaf', err.error.errors);
         });
     }
 

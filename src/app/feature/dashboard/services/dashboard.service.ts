@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { LandaService } from 'src/app/core/services/landa.service';
+import { CoreService } from 'src/app/core/services/core.service';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class DashboardService extends LandaService {
+export class DashboardService extends CoreService {
 
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 
-import { LandaService } from '../../../../core/services/landa.service';
+import { CoreService } from '../../../../core/services/core.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
     constructor(
         private authService: AuthService,
-        private landaService: LandaService,
+        private coreService: CoreService,
         private router: Router,
     ) {
         if (this.authService.getToken() !== '') {
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
                 this.router.navigate(['/home']);
             }, 1000)
         }, (err: any) => {
-            this.landaService.alertError('Mohon Maaf', err.error.errors);
+            this.coreService.alertError('Mohon Maaf', err.error.errors);
         });
     }
 }

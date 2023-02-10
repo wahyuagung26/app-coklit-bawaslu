@@ -8,7 +8,7 @@ import { DebounceKeyupDirective } from './directives/debounce-keyup.directive';
     CommonModule
   ],
   exports: [
-    DebounceKeyupDirective
+    DebounceKeyupDirective,
   ]
 })
 export class CoreModule { }

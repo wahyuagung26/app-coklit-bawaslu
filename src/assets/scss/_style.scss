@@ -46,6 +46,7 @@ td a {
 .header-subtitle {
     font-size: 0.8rem;
     color: #181818;
+    text-transform: capitalize;
 }
 
 .navbar {
@@ -282,4 +283,9 @@ div.dataTables_wrapper div.dataTables_filter {
 
 .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder {
     padding-top: 5px;
+}
+
+.form-control:disabled, .form-control[readonly] {
+    background-color: #e0e0e0;
+    opacity: 1;
 }

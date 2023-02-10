@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
     providedIn: 'root',
 })
 
-export class LandaService {
+export class CoreService {
     apiURL = environment.apiURL;
     userToken: any;
     httpOptions: any;

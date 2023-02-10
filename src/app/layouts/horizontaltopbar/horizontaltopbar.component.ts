@@ -16,6 +16,7 @@ import { environment } from '../../../environments/environment';
  */
 export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
 
+    title;
     element;
     configData;
     userLogin;
@@ -35,6 +36,10 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         this.env = environment;
     }
 
+    checkAccess(roles :string) {
+        return this.authService.checkAccess(roles);
+    }
+
     ngOnInit(): void {
         this.element = document.documentElement;
 
@@ -43,14 +48,25 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
             wheelSpeed: 0.3
         };
 
-        this.authService.getProfile().subscribe((user: any) => {
-            this.userLogin = user;
-        });
+        this.userLogin = this.authService.getUser();
+        this.title = this.setTitle();
     }
 
     logout() {
         this.authService.logout();
         this.router.navigate(['auth/login']);
+    }
+
+    setTitle() {
+        if (this.userLogin?.role == 'admin desa') {
+            return `Desa/Kel. ${this.userLogin.village_name.toLowerCase()} - Kecamatan ${this.userLogin.district_name.toLowerCase()}`;
+        }
+
+        if (this.userLogin?.role == 'admin kecamatan') {
+            return `Kecamatan ${this.userLogin.district_name.toLowerCase()}`;
+        }
+
+        return `Aplikasi Pengecekan Data Pemilih`;
     }
 
     /**

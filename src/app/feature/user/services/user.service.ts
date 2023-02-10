@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { LandaService } from 'src/app/core/services/landa.service';
+import { CoreService } from 'src/app/core/services/core.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class UserService extends LandaService {
+export class UserService extends CoreService {
 
     getRoles(arrParameter = {}) {
         return this.DataGet('/v1/roles', arrParameter);

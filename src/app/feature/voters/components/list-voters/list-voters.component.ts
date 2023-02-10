@@ -5,7 +5,7 @@ import { VotersService } from '../../services/voters.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RegionService } from 'src/app/core/services/region.service';
-import { LandaService } from 'src/app/core/services/landa.service';
+import { CoreService } from 'src/app/core/services/core.service';
 
 @Component({
     selector: 'app-list-voters',
@@ -15,6 +15,7 @@ import { LandaService } from 'src/app/core/services/landa.service';
 })
 
 export class ListVotersComponent implements OnInit {
+    modalReference: any;
     page: {
         total_item: any,
         page: any,
@@ -29,6 +30,7 @@ export class ListVotersComponent implements OnInit {
     districtName: string;
     villageId: string;
     villageName: string;
+    villageLastStatusId: number;
     totalCoklit: number;
     totalUnCoklit: number;
     listTps: any;
@@ -40,6 +42,7 @@ export class ListVotersComponent implements OnInit {
     listGender: any;
     listBoolean: any;
     userLogin: any;
+    isAllowEdit: any;
     filter: {
         name: '',
         nik: '',
@@ -64,7 +67,7 @@ export class ListVotersComponent implements OnInit {
         private authService: AuthService,
         private modalService: NgbModal,
         private regionService: RegionService,
-        private landaService: LandaService
+        private coreService: CoreService
     ) {
         this.statusData = environment.statusData;
         this.page = {
@@ -81,21 +84,22 @@ export class ListVotersComponent implements OnInit {
                 this.router.navigate(['/home']);
             }
 
-            this.statusDataId = parseInt(params.voterId);
             const voter = this.statusData.filter((val) => (val.id == params.voterId));
             this.statusDataName = `${voter?.[0]?.text} ` ?? `Data `;
+            this.statusDataId = parseInt(params.voterId);
 
+            this.userLogin = this.authService.getUser();
+            this.isAllowEdit = false;
 
-            this.fetchData();
+            this.districtId = this.userLogin.district_id;
+            this.districtName = (this.userLogin?.district_name ?? '').toLowerCase();
+            this.villageId = this.userLogin.village_id;
+
+            this.getDetailVillage();
+
+            this.fetchData({ page: 1 });
             this.getSummaries();
             this.resetFilter();
-        });
-
-        this.authService.getProfile().subscribe((user: any) => {
-            this.userLogin = user;
-
-            this.setDistrict(user.district_id, user.district_name);
-            this.setVillage(user.village_id, user.village_name);
         });
 
         this.setListTps();
@@ -127,7 +131,7 @@ export class ListVotersComponent implements OnInit {
     }
 
     openModal(content, windowClass = '') {
-        this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: windowClass });
+        this.modalReference = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: windowClass });
     }
 
     getSummaries() {
@@ -228,10 +232,33 @@ export class ListVotersComponent implements OnInit {
 
     saveAndLock() {
         this.regionService.lockVoters(this.villageId, this.statusDataId).subscribe((res: any) => {
-            this.landaService.alertSuccess('Berhasil', res.message);
+            this.coreService.alertSuccess('Berhasil', res.message);
+            this.modalReference.dismiss();
+            this.redirectNextData();
         }, res => {
-            this.landaService.alertError('Gagal', res.error.errors);
+            this.coreService.alertError('Gagal', res.error.errors);
         });
+    }
+
+    getDetailVillage() {
+        this.regionService.getVillageById(this.villageId).subscribe((res: any) => {
+            this.villageId = res.data.id;
+            this.villageName = res.data.village_name.toLowerCase();
+            this.villageLastStatusId = res.data.last_data_status_id;
+            this.districtId = res.data.district_id;
+
+            if (this.userLogin.role == 'admin desa' && this.villageLastStatusId == this.statusDataId) {
+                this.isAllowEdit = true;
+            } else {
+                this.isAllowEdit = false;
+            }
+        });
+    }
+
+    redirectNextData() {
+        if (this.statusDataId < 6) {
+            this.router.navigate([`/voters/${this.statusDataId + 1}`]);
+        }
     }
 
     setListTps() {
@@ -251,16 +278,6 @@ export class ListVotersComponent implements OnInit {
 
     setListDisabilitas() {
         this.listDisabilitas = this.votersService.getDisabilities();
-    }
-
-    setDistrict(districtId, districtName: string) {
-        this.districtName = districtName;
-        this.districtId = districtId;
-    }
-
-    setVillage(villageId, villageName: string) {
-        this.villageName = villageName;
-        this.villageId = villageId;
     }
 
     setListMarriedStatus() {

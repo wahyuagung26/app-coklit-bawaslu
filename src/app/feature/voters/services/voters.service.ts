@@ -1,13 +1,21 @@
 import { Injectable } from '@angular/core';
-import { LandaService } from 'src/app/core/services/landa.service';
+import { CoreService } from 'src/app/core/services/core.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class VotersService extends LandaService {
+export class VotersService extends CoreService {
 
     getVoters(statusDataId: number, arrParameter = {}) {
         return this.DataGet(`/v1/voters/${statusDataId}`, arrParameter);
+    }
+
+    getCoklitSummary(statusDataId, villageId) {
+        return this.DataGet(`/v1/voters/${statusDataId}/coklit/${villageId}`);
+    }
+
+    getRecap(statusDataId, arrParameter = {}) {
+        return this.DataGet(`/v1/summaries/${statusDataId}`, arrParameter);
     }
 
     updateProfile(statusDataId, payload) {
@@ -16,10 +24,6 @@ export class VotersService extends LandaService {
 
     updateStatus(statusDataId, payload) {
         return this.DataPut(`/v1/voters/${statusDataId}/status`, payload);
-    }
-
-    getCoklitSummary(statusDataId, villageId) {
-        return this.DataGet(`/v1/voters/${statusDataId}/coklit/${villageId}`);
     }
 
     save(statusDataId, payload) {
@@ -90,11 +94,11 @@ export class VotersService extends LandaService {
                 name: 'Belum Cukup Umur'
             },
             {
-                id: 4,
+                id: 5,
                 name: 'TNI'
             },
             {
-                id: 5,
+                id: 6,
                 name: 'POLRI'
             }
         ];

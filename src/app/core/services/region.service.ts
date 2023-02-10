@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { LandaService } from './landa.service';
+import { CoreService } from './core.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class RegionService extends LandaService {
+export class RegionService extends CoreService {
 
     getDistricts(arrParameter = {}) {
         return this.DataGet('/v1/districts', arrParameter);
@@ -14,7 +14,11 @@ export class RegionService extends LandaService {
         return this.DataGet(`/v1/districts/${districtsId}/villages`, arrParameter);
     }
 
+    getVillageById(villageId) {
+        return this.DataGet(`/v1/villages/${villageId}`);
+    }
+
     lockVoters(villageId, statusDataId) {
-        return this.DataPut(`/v1/villages/${villageId}/status/${statusDataId}`);
+        return this.DataPost(`/v1/voters/${statusDataId}/submit/${villageId}`);
     }
 }

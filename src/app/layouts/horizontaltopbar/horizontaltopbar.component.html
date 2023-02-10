@@ -9,7 +9,7 @@
                     Bawaslu Kab. Malang
                 </span>
                 <span class="header-subtitle">
-                    Kelurahan Lawang - Kecamatan Lawang
+                    {{title}}
                 </span>
             </div>
         </a>
@@ -46,8 +46,8 @@
     <div class="collapse navbar-menu navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/users']" (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components"
-                    role="button">
+                <a class="nav-link" [routerLink]="['/users']" *ngIf="checkAccess('admin kecamatan|admin kabupaten|super admin')" (click)="onMenuClick($event)" href="javascript: void(0);"
+                    id="topnav-components" role="button">
                     Data User
                 </a>
             </li>
@@ -58,13 +58,15 @@
                     <div class="arrow-down"></div>
                 </a>
                 <div class="dropdown-menu row" ngbDropdownMenu>
-                    <a class="col dropdown-item side-nav-link-ref" *ngFor="let voter of env.statusData"
-                        [routerLink]="['/voters', voter.id]">{{voter.text}}</a>
+                    <div *ngFor="let voter of env.statusData">
+                        <a class="col dropdown-item side-nav-link-ref" [routerLink]="['/voters', voter.id]"
+                            [ngClass]="voter.id > userLogin.last_data_status_id ? 'disabled' : ''">{{voter.text}}</a>
+                    </div>
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/recapitulation']" (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components"
-                    role="button">
+                <a class="nav-link" [routerLink]="['/recapitulation']" (click)="onMenuClick($event)"
+                    href="javascript: void(0);" id="topnav-components" role="button">
                     Rekapitulasi
                 </a>
             </li>

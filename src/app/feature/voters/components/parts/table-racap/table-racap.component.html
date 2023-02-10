@@ -1,56 +1,33 @@
-<div class="table-responsive">
-    <table class="table table-stripped">
+<div class="table-responsive table-scroll">
+    <table class="table table-stripped table-hover">
         <thead>
             <tr>
-                <th>Desa</th>
-                <th class="text-center">TPS</th>
-                <th class="text-center">Laki-Laki</th>
-                <th class="text-center">Perempuan</th>
-                <th class="text-center">Total</th>
+                <th scope="col">Desa / Kel.</th>
+                <th scope="col" *ngIf="showDistrict()">Kecamatan</th>
+                <th scope="col" class="text-center">TPS</th>
+                <th scope="col" class="text-center">Laki-Laki</th>
+                <th scope="col" class="text-center">Perempuan</th>
+                <th scope="col" class="text-center">Total</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Lawang</td>
-                <td class="text-center">1</td>
-                <td class="text-center">10</td>
-                <td class="text-center">10</td>
-                <td class="font-weight-bold text-center">20</td>
-            </tr>
-            <tr>
-                <td>Lawang</td>
-                <td class="text-center">2</td>
-                <td class="text-center">10</td>
-                <td class="text-center">10</td>
-                <td class="font-weight-bold text-center">20</td>
-            </tr>
-            <tr>
-                <td>Lawang</td>
-                <td class="text-center">3</td>
-                <td class="text-center">10</td>
-                <td class="text-center">10</td>
-                <td class="font-weight-bold text-center">20</td>
-            </tr>
-            <tr>
-                <td>Bedali</td>
-                <td class="text-center">1</td>
-                <td class="text-center">10</td>
-                <td class="text-center">10</td>
-                <td class="font-weight-bold text-center">20</td>
-            </tr>
-            <tr>
-                <td>Ketindan</td>
-                <td class="text-center">1</td>
-                <td class="text-center">10</td>
-                <td class="text-center">10</td>
-                <td class="font-weight-bold text-center">20</td>
-            </tr>
-            <tr>
-                <td colspan="2" class="font-weight-bold text-right">Total</td>
-                <td class="font-weight-bold text-center">50</td>
-                <td class="font-weight-bold text-center">50</td>
-                <td class="font-weight-bold text-center">100</td>
+            <tr *ngFor="let val of list">
+                <td>{{val.village_name}}</td>
+                <td *ngIf="showDistrict()">{{val.district_name}}</td>
+                <td class="text-center">{{val.tps}}</td>
+                <td class="text-center">{{val.total_male | number}}</td>
+                <td class="text-center">{{val.total_female | number}}</td>
+                <td class="font-weight-bold text-center">{{val.total | number}}</td>
             </tr>
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="font-weight-bold text-right" *ngIf="!showDistrict()">Total</td>
+                <td colspan="3" class="font-weight-bold text-right" *ngIf="showDistrict()">Total</td>
+                <td class="font-weight-bold text-center">{{grandTotalMale | number}}</td>
+                <td class="font-weight-bold text-center">{{grandTotalFemale | number}}</td>
+                <td class="font-weight-bold text-center">{{grandTotal | number}}</td>
+            </tr>
+        </tfoot>
     </table>
 </div>
