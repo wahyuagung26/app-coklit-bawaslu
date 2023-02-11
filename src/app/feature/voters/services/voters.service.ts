@@ -11,7 +11,11 @@ export class VotersService extends CoreService {
     }
 
     getCoklitSummary(statusDataId, villageId) {
-        return this.DataGet(`/v1/voters/${statusDataId}/coklit/${villageId}`);
+        return this.DataGet(`/v1/voters/${statusDataId}/status/${villageId}/coklit`);
+    }
+
+    getTotalUnChecked(statusDataId, villageId) {
+        return this.DataGet(`/v1/voters/${statusDataId}/status/${villageId}/unchecked`);
     }
 
     getRecap(statusDataId, arrParameter = {}) {

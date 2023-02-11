@@ -33,6 +33,7 @@ export class ListVotersComponent implements OnInit {
     villageLastStatusId: number;
     totalCoklit: number;
     totalUnCoklit: number;
+    totalUnchecked: number;
     listTps: any;
     listTms: any;
     listCoklit: any;
@@ -90,6 +91,7 @@ export class ListVotersComponent implements OnInit {
 
             this.userLogin = this.authService.getUser();
             this.isAllowEdit = false;
+            this.totalUnchecked = 0;
 
             this.districtId = this.userLogin.district_id;
             this.districtName = (this.userLogin?.district_name ?? '').toLowerCase();
@@ -131,7 +133,13 @@ export class ListVotersComponent implements OnInit {
     }
 
     openModal(content, windowClass = '') {
-        this.modalReference = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: windowClass });
+        console.log(content);
+        this.votersService.getTotalUnChecked(this.statusDataId, this.villageId).subscribe((resp: any) => {
+            this.totalUnchecked = resp.data?.total_unchecked ?? 0;
+            this.modalReference = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: windowClass });
+        }, err => {
+
+        });
     }
 
     getSummaries() {
@@ -236,7 +244,7 @@ export class ListVotersComponent implements OnInit {
             this.modalReference.dismiss();
             this.redirectNextData();
         }, res => {
-            this.coreService.alertError('Gagal', res.error.errors);
+            this.coreService.alertError('Gagal', res.error.message);
         });
     }
 
@@ -257,7 +265,8 @@ export class ListVotersComponent implements OnInit {
 
     redirectNextData() {
         if (this.statusDataId < 6) {
-            this.router.navigate([`/voters/${this.statusDataId + 1}`]);
+            this.router.navigateByUrl(`/voters/${this.statusDataId + 1}`);
+
         }
     }
 

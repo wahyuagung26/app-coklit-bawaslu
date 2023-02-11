@@ -453,14 +453,19 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" *ngIf="totalUnchecked == 0">
         <p>Pastikan semua data telah benar. Setelah anda menyetorkan {{statusDataName}}, maka data tersebut tidak dapat
             diubah lagi</p>
         <p>Yakin ingin melanjutkan ?</p>
     </div>
+    <div class="modal-body" *ngIf="totalUnchecked > 0">
+        <p>Masih ada <b>{{totalUnchecked | number}} data pemilih</b> yang belum dicek. Mohon selesaikan pengecekan terhadap semua
+            data terlebih dahulu</p>
+    </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-light" (click)="modal.close('Save click')">Batalkan</button>
-        <button type="button" class="btn btn-primary" (click)="saveAndLock()"><em class="fa fa-key"></em>&nbsp;
+        <button type="button" class="btn btn-primary" (click)="saveAndLock()" *ngIf="totalUnchecked == 0"><em
+                class="fa fa-key"></em>&nbsp;
             Lanjut Setor dan Kunci Data
             Pemilih</button>
     </div>

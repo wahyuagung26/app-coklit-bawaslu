@@ -7,8 +7,8 @@ import { ListVotersComponent } from './voters/components/list-voters/list-voters
 import { RecapComponent } from './voters/recap/recap.component';
 
 const routes: Routes = [
-    { path: '', component: DashboardComponent },
-    { path: 'home', component: DashboardComponent },
+    { path: '', component: RecapComponent },
+    { path: 'home', component: RecapComponent },
     { path: 'users', component: ListUserComponent },
     { path: 'voters/:voterId', component: ListVotersComponent },
     { path: 'add-voter/:voterId', component: FormVotersComponent },
