@@ -33,10 +33,11 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
                 this.activateMenu();
             }
         });
+
         this.env = environment;
     }
 
-    checkAccess(roles :string) {
+    checkAccess(roles: string) {
         return this.authService.checkAccess(roles);
     }
 
@@ -49,6 +50,10 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         };
 
         this.userLogin = this.authService.getUser();
+        this.authService.getProfile().subscribe((user: any) => {
+            this.userLogin.last_data_status_id = user.last_data_status_id;
+        });
+
         this.title = this.setTitle();
     }
 

@@ -44,21 +44,25 @@ export class ListVotersComponent implements OnInit {
     listBoolean: any;
     userLogin: any;
     isAllowEdit: any;
+    districts: any;
+    villages: any;
     filter: {
-        name: '',
-        nik: '',
-        nkk: '',
-        rt: '',
-        rw: '',
-        tps: '',
-        married_status: '',
-        is_coklit: '',
-        is_new_voter: '',
-        is_novice_voter: '',
-        tms: '',
-        disabilities: '',
-        is_profile_updated: '',
-        is_checked: ''
+        name,
+        nik,
+        nkk,
+        rt,
+        rw,
+        tps,
+        married_status,
+        is_coklit,
+        is_new_voter,
+        is_novice_voter,
+        tms,
+        disabilities,
+        is_profile_updated,
+        is_checked,
+        district_id,
+        village_id
     };
 
     constructor(
@@ -97,6 +101,8 @@ export class ListVotersComponent implements OnInit {
             this.districtName = (this.userLogin?.district_name ?? '').toLowerCase();
             this.villageId = this.userLogin.village_id;
 
+            this.getVillages(this.userLogin.district_id);
+            this.getDistricts();
             this.getDetailVillage();
 
             this.fetchData({ page: 1 });
@@ -128,22 +134,35 @@ export class ListVotersComponent implements OnInit {
             tms: '',
             disabilities: '',
             is_profile_updated: '',
-            is_checked: ''
+            is_checked: '',
+            district_id: this.userLogin.district_id,
+            village_id: this.userLogin.village_id,
         }
     }
 
     openModal(content, windowClass = '') {
-        console.log(content);
         this.votersService.getTotalUnChecked(this.statusDataId, this.villageId).subscribe((resp: any) => {
             this.totalUnchecked = resp.data?.total_unchecked ?? 0;
+            if (this.statusDataId == 1) {
+                this.totalUnCoklit = resp.data?.total_uncoklit ?? 0;
+            }
+
             this.modalReference = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: windowClass });
         }, err => {
 
         });
     }
 
+    export() {
+        window.open(`${environment.apiURL}/v1/voters/${this.statusDataId}/export/excel?village_id=${this.villageId}&district_id=${this.districtId}`);
+    }
+
     getSummaries() {
-        if (this.statusDataId > 1) return false;
+        if (this.statusDataId > 1) {
+            this.totalCoklit = 0;
+            this.totalUnCoklit = 0;
+            return false;
+        };
 
         this.votersService.getCoklitSummary(this.statusDataId, this.villageId ?? 0).subscribe((res: any) => {
             this.totalCoklit = res.data.total_coklit;
@@ -263,10 +282,25 @@ export class ListVotersComponent implements OnInit {
         });
     }
 
+    getDistricts() {
+        this.regionService.getDistricts().subscribe((res: any) => {
+            this.districts = res.data;
+        }, err => {
+            console.log(err);
+        });
+    }
+
+    getVillages(districtsId) {
+        this.regionService.getVillages(districtsId).subscribe((res: any) => {
+            this.villages = res.data;
+        }, err => {
+            console.log(err);
+        });
+    }
+
     redirectNextData() {
         if (this.statusDataId < 6) {
-            this.router.navigateByUrl(`/voters/${this.statusDataId + 1}`);
-
+            window.location.href = `/voters/${this.statusDataId + 1}`;
         }
     }
 

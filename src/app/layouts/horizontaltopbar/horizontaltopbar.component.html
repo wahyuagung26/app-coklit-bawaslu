@@ -60,7 +60,7 @@
                 <div class="dropdown-menu row" ngbDropdownMenu>
                     <div *ngFor="let voter of env.statusData">
                         <a class="col dropdown-item side-nav-link-ref" [routerLink]="['/voters', voter.id]"
-                            [ngClass]="userLogin.last_data_status_id < voter.id ? 'disabled' : ''">{{voter.text}} {{userLogin.last_data_status_id}}</a>
+                            [ngClass]="userLogin.last_data_status_id < voter.id && userLogin.role == 'admin desa' ? 'disabled' : ''">{{voter.text}}</a>
                     </div>
                 </div>
             </li>

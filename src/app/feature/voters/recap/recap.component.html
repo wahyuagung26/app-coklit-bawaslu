@@ -22,8 +22,7 @@
                                 <div class="form-group">
                                     <label for="district_id">Kecamatan</label>
                                     <select class="form-control" [(ngModel)]="filter.district_id" name="district_id"
-                                        id="district_id"
-                                        [disabled]="userLogin?.role == 'admin kecamatan'">
+                                        id="district_id" [disabled]="userLogin?.role == 'admin kecamatan'">
                                         <option *ngFor="let val of districts" value="{{val.id}}">{{val.district_name}}
                                         </option>
                                     </select>
@@ -48,7 +47,7 @@
                                             <em class="fa fa-search"></em>
                                             Cari
                                         </button>
-                                        <button class="btn btn-success">
+                                        <button class="btn btn-success" (click)="export()">
                                             <em class="fa fa-file-excel"></em>
                                             Export
                                         </button>

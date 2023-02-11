@@ -154,7 +154,7 @@ export class VotersService extends CoreService {
                 name: 'Sudah'
             },
             {
-                id: 2,
+                id: 0,
                 name: 'Belum'
             }
         ];

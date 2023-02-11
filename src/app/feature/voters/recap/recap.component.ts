@@ -63,6 +63,10 @@ export class RecapComponent implements OnInit {
         }
     }
 
+    export() {
+        window.open(`${environment.apiURL}/v1/summaries/${this.filter.status_data_id}/export/excel?village_id=${this.filter.village_id}&district_id=${this.filter.district_id}`);
+    }
+
     getRecap() {
         this.voterService.getRecap(this.filter.status_data_id).subscribe((resp: any) => {
             this.summaries = resp.data;

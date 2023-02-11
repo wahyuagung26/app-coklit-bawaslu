@@ -63,11 +63,11 @@ export class HttpConfigInterceptor implements HttpInterceptor {
             map((event: HttpEvent<any>) => {
                 return event;
             }),
-            catchError((error: HttpErrorResponse) => {
-                if ([403, 401].includes(error.status)) {
+            catchError((resp: HttpErrorResponse) => {
+                if ([403, 401].includes(resp.status)) {
                     Swal.fire({
                         title: 'Ooops',
-                        text: error.error.errors[0],
+                        text: resp?.error?.messages,
                         icon: 'warning',
                         showCancelButton: false,
                         confirmButtonColor: '#34c38f',
@@ -82,10 +82,10 @@ export class HttpConfigInterceptor implements HttpInterceptor {
                             });
                         }
                     });
-                    return throwError(error);
+                    return throwError(resp);
                 }
 
-                return throwError(error);
+                return throwError(resp);
             }),
             finalize(() => this.loaderService.hide())
         );
