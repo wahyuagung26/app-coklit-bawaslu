@@ -1,8 +1,8 @@
 
 export const environment = {
     production: true,
-    apiURL: 'http://svc-bawaslu.test/api',
-    baseUrl: 'http://svc-bawaslu.test/',
+    apiURL: 'https://api-bawaslu.wahyuagung.id/api',
+    baseUrl: 'https://bawaslu.wahyuagung.id',
     statusData: [
         {
             id: 1,

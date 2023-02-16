@@ -6,6 +6,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RegionService } from 'src/app/core/services/region.service';
 import { CoreService } from 'src/app/core/services/core.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Component({
     selector: 'app-list-voters',
@@ -15,20 +16,21 @@ import { CoreService } from 'src/app/core/services/core.service';
 })
 
 export class ListVotersComponent implements OnInit {
+    DEFAULT_ERROR_MESSAGE = 'Server sedang sibuk coba lagi nanti';
+
     modalReference: any;
     page: {
         total_item: any,
         page: any,
         per_page: any,
     };
-
     editing: any;
     statusDataId: number;
     statusDataName: string;
     statusData: any;
-    districtId: string;
+    districtId: any;
     districtName: string;
-    villageId: string;
+    villageId: any;
     villageName: string;
     villageLastStatusId: number;
     totalCoklit: number;
@@ -46,6 +48,10 @@ export class ListVotersComponent implements OnInit {
     isAllowEdit: any;
     districts: any;
     villages: any;
+    massAction: {
+        isCoklit: boolean,
+        isChecked: boolean
+    };
     filter: {
         name,
         nik,
@@ -62,7 +68,7 @@ export class ListVotersComponent implements OnInit {
         is_profile_updated,
         is_checked,
         district_id,
-        village_id
+        village_id,
     };
 
     constructor(
@@ -72,13 +78,14 @@ export class ListVotersComponent implements OnInit {
         private authService: AuthService,
         private modalService: NgbModal,
         private regionService: RegionService,
-        private coreService: CoreService
+        private coreService: CoreService,
+        private loaderService: LoaderService
     ) {
         this.statusData = environment.statusData;
         this.page = {
             total_item: 0,
             page: 1,
-            per_page: 25,
+            per_page: 20,
         };
         this.editing = {};
     }
@@ -100,14 +107,12 @@ export class ListVotersComponent implements OnInit {
             this.districtId = this.userLogin.district_id;
             this.districtName = (this.userLogin?.district_name ?? '').toLowerCase();
             this.villageId = this.userLogin.village_id;
+            this.listVoters = [];
 
-            this.getVillages(this.userLogin.district_id);
             this.getDistricts();
-            this.getDetailVillage();
+            this.getVillages(this.userLogin.district_id);
 
-            this.fetchData({ page: 1 });
-            this.getSummaries();
-            this.resetFilter();
+            this.resetPayload();
         });
 
         this.setListTps();
@@ -119,7 +124,7 @@ export class ListVotersComponent implements OnInit {
         this.setListBoolean();
     }
 
-    resetFilter() {
+    resetPayload() {
         this.filter = {
             name: '',
             nik: '',
@@ -138,17 +143,28 @@ export class ListVotersComponent implements OnInit {
             district_id: this.userLogin.district_id,
             village_id: this.userLogin.village_id,
         }
+
+        this.massAction = {
+            isCoklit: false,
+            isChecked: false
+        };
     }
 
-    openModal(content, windowClass = '') {
-        this.votersService.getTotalUnChecked(this.statusDataId, this.villageId).subscribe((resp: any) => {
+    openModal(content, windowClass = '', checkStatus = false) {
+        if (!checkStatus) {
+            this.modalReference = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: windowClass });
+            return true;
+        }
+
+        this.loaderService.show();
+        this.votersService.getTotalUnChecked(this.statusDataId, this.filter.village_id, this.filter.district_id).subscribe((resp: any) => {
             this.totalUnchecked = resp.data?.total_unchecked ?? 0;
             if (this.statusDataId == 1) {
                 this.totalUnCoklit = resp.data?.total_uncoklit ?? 0;
             }
 
             this.modalReference = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: windowClass });
-        }, err => {
+        }, resp => {
 
         });
     }
@@ -157,25 +173,49 @@ export class ListVotersComponent implements OnInit {
         window.open(`${environment.apiURL}/v1/voters/${this.statusDataId}/export/excel?village_id=${this.villageId}&district_id=${this.districtId}`);
     }
 
-    getSummaries() {
+    getTotalCoklit() {
         if (this.statusDataId > 1) {
             this.totalCoklit = 0;
             this.totalUnCoklit = 0;
             return false;
         };
 
-        this.votersService.getCoklitSummary(this.statusDataId, this.villageId ?? 0).subscribe((res: any) => {
+        this.votersService.getCoklitSummary(this.statusDataId, this.filter.village_id ?? 0, this.filter.district_id ?? 0).subscribe((res: any) => {
             this.totalCoklit = res.data.total_coklit;
             this.totalUnCoklit = res.data.total_uncoklit;
         });
     }
 
+    setVillageName() {
+        if (this.villages) {
+            this.villageName = this.villages.find(item => this.filter.village_id == item.id)?.village_name;
+        }
+    }
+
+    setDistrictName() {
+        if (this.districts) {
+            this.districtName = this.districts.find(item => this.filter.district_id == item.id)?.district_name;
+        }
+    }
+
     getVoters(params = null) {
         let query = {
             ...params,
-            page: (params?.offset ?? 0) + 1
+            page: (params?.offset ?? 0) + 1,
+            per_page: this.page.per_page
         }
 
+        this.setVillageName();
+        this.setDistrictName();
+
+        this.villageId = this.filter.village_id;
+        this.districtId = this.filter.district_id;
+
+        if (this.userLogin.role != 'admin desa' && this.statusDataId == 1) {
+            this.getTotalCoklit();
+        }
+
+        this.loaderService.show();
         this.votersService.getVoters(this.statusDataId, query).subscribe((res: any) => {
             const { data, meta } = res;
             this.listVoters = data;
@@ -184,7 +224,7 @@ export class ListVotersComponent implements OnInit {
                 per_page: meta.per_page,
                 page: meta.page
             };
-        }, (err: any) => {
+        }, (res: any) => {
 
         });
     }
@@ -194,6 +234,7 @@ export class ListVotersComponent implements OnInit {
             ...this.filter,
             ...pageInfo
         }
+
         this.getVoters(query);
     }
 
@@ -230,6 +271,7 @@ export class ListVotersComponent implements OnInit {
         let payload = {
             id: this.listVoters[rowIndex]['id'],
         }
+
         payload[cell] = event.target.value;
 
         this.editing[rowIndex + '-' + cell] = false;
@@ -252,7 +294,7 @@ export class ListVotersComponent implements OnInit {
             this.listVoters = [...this.listVoters];
 
             if (cell == 'is_coklit') {
-                this.getSummaries();
+                this.getTotalCoklit();
             }
         });
     }
@@ -267,21 +309,6 @@ export class ListVotersComponent implements OnInit {
         });
     }
 
-    getDetailVillage() {
-        this.regionService.getVillageById(this.villageId).subscribe((res: any) => {
-            this.villageId = res.data.id;
-            this.villageName = res.data.village_name.toLowerCase();
-            this.villageLastStatusId = res.data.last_data_status_id;
-            this.districtId = res.data.district_id;
-
-            if (this.userLogin.role == 'admin desa' && this.villageLastStatusId == this.statusDataId) {
-                this.isAllowEdit = true;
-            } else {
-                this.isAllowEdit = false;
-            }
-        });
-    }
-
     getDistricts() {
         this.regionService.getDistricts().subscribe((res: any) => {
             this.districts = res.data;
@@ -293,6 +320,28 @@ export class ListVotersComponent implements OnInit {
     getVillages(districtsId) {
         this.regionService.getVillages(districtsId).subscribe((res: any) => {
             this.villages = res.data;
+            res.data.forEach(val => {
+                if (this.userLogin.role == 'admin desa' && this.userLogin.village_id == val.id) {
+                    this.villageId = val.id;
+                    this.villageName = val.village_name.toLowerCase();
+                    this.villageLastStatusId = val.last_data_status_id;
+                    this.districtId = val.district_id;
+                    this.filter.village_id = val.id;
+                    this.filter.district_id = val.district_id;
+                }
+
+                if (this.userLogin.role == 'admin desa' && this.userLogin.village_id == val.id && this.userLogin.last_data_status_id == val.last_data_status_id) {
+                    this.isAllowEdit = true;
+                }
+
+                if (this.userLogin.role != 'admin desa') {
+                    this.isAllowEdit = false;
+                    this.filter.village_id = val.id;
+                }
+            });
+
+            this.fetchData();
+            this.getTotalCoklit();
         }, err => {
             console.log(err);
         });
@@ -335,4 +384,34 @@ export class ListVotersComponent implements OnInit {
         this.listBoolean = this.votersService.getListBoolean();
     }
 
+    coklitAll() {
+        const payload = {
+            village_id: this.filter.village_id,
+            district_id: this.filter.district_id,
+            is_coklit: !this.massAction.isCoklit
+        };
+
+        this.votersService.coklitAll(this.statusDataId, payload).subscribe((resp: any) => {
+            this.coreService.alertSuccess('Berhasil', resp.message);
+            this.getTotalCoklit();
+            this.fetchData();
+        }, (resp) => {
+            this.coreService.alertError('Gagal', resp?.error?.message ?? this.DEFAULT_ERROR_MESSAGE);
+        });
+    }
+
+    checklistAll() {
+        const payload = {
+            village_id: this.filter.village_id,
+            district_id: this.filter.district_id,
+            is_checked: !this.massAction.isChecked
+        };
+
+        this.votersService.checklistAll(this.statusDataId, payload).subscribe((resp: any) => {
+            this.coreService.alertSuccess('Berhasil', resp.message);
+            this.fetchData();
+        }, (resp) => {
+            this.coreService.alertError('Gagal', resp?.error?.message ?? this.DEFAULT_ERROR_MESSAGE);
+        });
+    }
 }

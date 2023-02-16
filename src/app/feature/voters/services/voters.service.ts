@@ -10,12 +10,12 @@ export class VotersService extends CoreService {
         return this.DataGet(`/v1/voters/${statusDataId}`, arrParameter);
     }
 
-    getCoklitSummary(statusDataId, villageId) {
-        return this.DataGet(`/v1/voters/${statusDataId}/status/${villageId}/coklit`);
+    getCoklitSummary(statusDataId, villageId, districtId = 0) {
+        return this.DataGet(`/v1/voters/${statusDataId}/status/${villageId}/coklit?district_id=${districtId}`);
     }
 
-    getTotalUnChecked(statusDataId, villageId) {
-        return this.DataGet(`/v1/voters/${statusDataId}/status/${villageId}/unchecked`);
+    getTotalUnChecked(statusDataId, villageId, districtId = 0) {
+        return this.DataGet(`/v1/voters/${statusDataId}/status/${villageId}/unchecked?district_id=${districtId}`);
     }
 
     getRecap(statusDataId, arrParameter = {}) {
@@ -32,6 +32,14 @@ export class VotersService extends CoreService {
 
     save(statusDataId, payload) {
         return this.DataPost(`/v1/voters/${statusDataId}`, payload);
+    }
+
+    coklitAll(statusDataId, payload) {
+        return this.DataPost(`/v1/mass/coklit/${statusDataId}`, payload);
+    }
+
+    checklistAll(statusDataId, payload) {
+        return this.DataPost(`/v1/mass/checklist/${statusDataId}`, payload);
     }
 
     getDisabilities() {

@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         }
     }
 
-    ngOnInit() {}
+    ngOnInit() { }
 
     ngAfterViewInit() {
     }
@@ -38,10 +38,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
             this.authService.saveToken(res.data.token);
             this.authService.saveUserLogin();
             setTimeout(() => {
-                this.router.navigate(['/home']);
+                window.location.href = `/home`;
             }, 1000)
         }, (err: any) => {
-            this.coreService.alertError('Mohon Maaf', err.error.errors);
+            this.coreService.alertError('Mohon Maaf', err?.error?.message);
         });
     }
 }

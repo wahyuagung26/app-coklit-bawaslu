@@ -29,7 +29,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
         let token: string = this.authService.getToken();
         let tokenCsrf: string = this.authService.getCsrf();
 
-        if(['PUT', 'POST', 'DELETE'].includes(request.method)) {
+        if (['PUT', 'POST', 'DELETE'].includes(request.method)) {
             this.loaderService.show();
         }
 
@@ -67,7 +67,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
                 if ([403, 401].includes(resp.status)) {
                     Swal.fire({
                         title: 'Ooops',
-                        text: resp?.error?.messages,
+                        text: resp?.error?.message,
                         icon: 'warning',
                         showCancelButton: false,
                         confirmButtonColor: '#34c38f',

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-light shadow" id="page-topbar">
     <div class="container-fluid navbar-top">
-        <a class="navbar-brand xs-hidden sm-hidden" style="padding: 0" href="#">
+        <a class="navbar-brand xs-hidden" style="padding: 0" href="#">
             <div>
                 <img src="assets/images/logo.png" alt="" height="22" />
             </div>
@@ -14,8 +14,8 @@
             </div>
         </a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
-            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" (click)="toggleMenubar()" data-toggle="collapse" data-target="#main-navbar"
+            aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
             <em class="fa fa-fw fa-bars"></em>
         </button>
 
@@ -43,7 +43,7 @@
             </div>
         </div>
     </div>
-    <div class="collapse navbar-menu navbar-collapse" id="navbarTogglerDemo02">
+    <div class="collapse navbar-menu navbar-collapse" id="topnav-menu-content">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
                 <a class="nav-link" [routerLink]="['/users']" *ngIf="checkAccess('admin kecamatan|admin kabupaten|super admin')" (click)="onMenuClick($event)" href="javascript: void(0);"

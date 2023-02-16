@@ -119,9 +119,7 @@ export class FormUserComponent implements OnInit {
     getUser(userId) {
         this.userService.getUserById(userId).subscribe((res: any) => {
             this.formModel = res.data;
-            if (this.formModel.district_id) {
-                this.getVillages(this.formModel.district_id);
-            }
+            this.getVillages(res.data.district_id);
         }, err => {
             console.log(err);
         });
@@ -131,7 +129,7 @@ export class FormUserComponent implements OnInit {
         this.regionService.getDistricts().subscribe((res: any) => {
             this.districts = res.data;
 
-            if (this.userLogin?.district_id) {
+            if (this.userLogin?.district_id && this.userId < 1) {
                 this.getVillages(this.userLogin.district_id);
             }
         }, err => {

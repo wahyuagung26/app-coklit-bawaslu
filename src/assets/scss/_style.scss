@@ -246,23 +246,36 @@ div.dataTables_wrapper div.dataTables_filter {
     }
     /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
 }
-@media (max-width: 480px) {
-    .xs-hidden {
+
+@media (max-width: 961px) {
+    .sm-hidden {
         display: none !important;
     }
-    /* smartphones, Android phones, landscape iPhone */
+
+    .navbar-toggler {
+        position: fixed;
+        left: 300px;
+    }
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
 }
+
 @media (max-width: 641px) {
     .sm-hidden {
         display: none !important;
     }
     /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
 }
-@media (max-width: 961px) {
-    .sm-hidden {
+
+@media (max-width: 480px) {
+    .xs-hidden {
         display: none !important;
     }
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
+
+    .navbar-toggler {
+        position: inherit;
+        left: 0px;
+    }
+    /* smartphones, Android phones, landscape iPhone */
 }
 
 .sidebar {

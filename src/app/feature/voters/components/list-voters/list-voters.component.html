@@ -98,19 +98,24 @@
                                 </div>
                             </div>
                             <div class="col-md-4 col-sm-2">
-                                <div class="form-group">
+                                <div class="form-group" id="form-filter-button">
                                     <label for="button">&nbsp;</label>
                                     <div id="button">
-                                        <button type="button" class="btn btn-primary mr-2"
+                                        <button type="button" class="btn btn-light mr-2"
                                             (click)="fetchData({offset: 0})"><em class="fa fa-search"></em>
                                             Cari</button>
-                                        <button type="button" class="btn btn-primary mr-2"
+                                        <button type="button" class="btn btn-light mr-2"
                                             (click)="openModal(modalFilter, 'right full-height')"><em
                                                 class="fa fa-filter"></em>
                                             Filter</button>
-                                        <button type="button" (click)="export()" class="btn btn-success"><em
+                                        <button type="button" (click)="export()" class="btn btn-success mr-2"><em
                                                 class="fa fa-file-excel"></em>
                                             Export</button>
+                                        <button class="btn btn-primary" (click)="openModal(modalConfirm, '', true)"
+                                            *ngIf="isAllowEdit">
+                                            <em class="fa fa-save"></em>&nbsp;
+                                            Setorkan Data
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -122,350 +127,377 @@
         <div class="col-md-12">
             <div class="card card-transparent">
                 <div class="card-body">
-                    <div>
-                        <ngx-datatable class="datatable material" columnMode="force" [scrollbarH]="true"
-                            [scrollbarV]="false" [rows]="listVoters" [headerHeight]="50" [footerHeight]="50"
-                            [rowHeight]="'auto'" [externalPaging]="true" [count]="page.total_item"
-                            [offset]="page.page - 1" [limit]="page.per_page" (page)="fetchData($event)">
+                    <div id="per_page">
+                        <div class="row">
+                            <div class="col-md-12" id="per-page-container">
+                                <label class="col-form-label per-page">Per Halaman</label>
+                                <select class="form-control per-page" id="show-per-page" name="per_page"
+                                    [(ngModel)]="page.per_page" (change)="fetchData(page)">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <label class="col-form-label per-page">Tampilkan :</label>
+                            </div>
+                        </div>
+                    </div>
+                    <ngx-datatable class="datatable material striped" columnMode="force" [scrollbarH]="true"
+                        [scrollbarV]="false" [rows]="listVoters" [headerHeight]="50" [footerHeight]="50"
+                        [rowHeight]="'auto'" [externalPaging]="true" [count]="page.total_item" [offset]="page.page - 1"
+                        [limit]="page.per_page" (page)="fetchData($event)">
 
-                            <ngx-datatable-column [sortable]="false" name="NIK" [width]="180" [frozenLeft]="true"
-                                prop="nik">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                    let-row="row">
-                                    <span *ngIf="!isAllowEdit">
+                        <ngx-datatable-column [sortable]="false" name="NIK" [width]="180" [frozenLeft]="true"
+                            prop="nik">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                let-row="row">
+                                <span *ngIf="!isAllowEdit">
+                                    {{ value }}
+                                </span>
+                                <div class="inline-edit" *ngIf="isAllowEdit">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-nik'] = true"
+                                        *ngIf="!editing[rowIndex + '-nik']">
                                         {{ value }}
                                     </span>
-                                    <div class="inline-edit" *ngIf="isAllowEdit">
-                                        <span title="Double click to edit" (click)="editing[rowIndex + '-nik'] = true"
-                                            *ngIf="!editing[rowIndex + '-nik']">
-                                            {{ value }}
-                                        </span>
-                                        <input (blur)="updateProfile($event, 'nik', rowIndex)"
-                                            *ngIf="editing[rowIndex + '-nik']" type="text" class="form-control"
-                                            [value]="value" />
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
+                                    <input (blur)="updateProfile($event, 'nik', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-nik']" type="text" class="form-control"
+                                        [value]="value" />
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
 
-                            <ngx-datatable-column [sortable]="false" name="No KK" [width]="180" [frozenLeft]="true"
-                                prop="nkk">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                    let-row="row">
-                                    <span *ngIf="!isAllowEdit">
+                        <ngx-datatable-column [sortable]="false" name="No KK" [width]="180" [frozenLeft]="true"
+                            prop="nkk">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                let-row="row">
+                                <span *ngIf="!isAllowEdit">
+                                    {{ value }}
+                                </span>
+                                <div class="inline-edit" *ngIf="isAllowEdit">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-nkk'] = true"
+                                        *ngIf="!editing[rowIndex + '-nkk']">
                                         {{ value }}
                                     </span>
-                                    <div class="inline-edit" *ngIf="isAllowEdit">
-                                        <span title="Double click to edit" (click)="editing[rowIndex + '-nkk'] = true"
-                                            *ngIf="!editing[rowIndex + '-nkk']">
-                                            {{ value }}
-                                        </span>
-                                        <input (blur)="updateProfile($event, 'nkk', rowIndex)"
-                                            *ngIf="editing[rowIndex + '-nkk']" type="text" class="form-control"
-                                            [value]="value" />
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
+                                    <input (blur)="updateProfile($event, 'nkk', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-nkk']" type="text" class="form-control"
+                                        [value]="value" />
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
 
-                            <ngx-datatable-column [sortable]="false" name="Nama" [width]="240" [frozenLeft]="true"
-                                prop="name">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                    let-row="row">
-                                    <span title="Double click to edit" *ngIf="!isAllowEdit">
+                        <ngx-datatable-column [sortable]="false" name="Nama" [width]="240" [frozenLeft]="true"
+                            prop="name">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                let-row="row">
+                                <span title="Double click to edit" *ngIf="!isAllowEdit">
+                                    {{ value }}
+                                </span>
+                                <div class="inline-edit" *ngIf="isAllowEdit">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-name'] = true"
+                                        *ngIf="!editing[rowIndex + '-name']">
                                         {{ value }}
                                     </span>
-                                    <div class="inline-edit" *ngIf="isAllowEdit">
-                                        <span title="Double click to edit" (click)="editing[rowIndex + '-name'] = true"
-                                            *ngIf="!editing[rowIndex + '-name']">
-                                            {{ value }}
-                                        </span>
-                                        <input (blur)="updateProfile($event, 'name', rowIndex)"
-                                            *ngIf="editing[rowIndex + '-name']" type="text" class="form-control"
-                                            [value]="value" />
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
+                                    <input (blur)="updateProfile($event, 'name', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-name']" type="text" class="form-control"
+                                        [value]="value" />
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
 
-                            <ngx-datatable-column [sortable]="false" name="Tempat Lahir" prop="place_of_birth">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                    let-row="row">
-                                    <span *ngIf="!isAllowEdit">
+                        <ngx-datatable-column [sortable]="false" name="Tempat Lahir" prop="place_of_birth">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                let-row="row">
+                                <span *ngIf="!isAllowEdit">
+                                    {{ value }}
+                                </span>
+                                <div class="inline-edit" *ngIf="isAllowEdit">
+                                    <span title="Double click to edit"
+                                        (click)="editing[rowIndex + '-place_of_birth'] = true"
+                                        *ngIf="!editing[rowIndex + '-place_of_birth']">
                                         {{ value }}
                                     </span>
-                                    <div class="inline-edit" *ngIf="isAllowEdit">
-                                        <span title="Double click to edit"
-                                            (click)="editing[rowIndex + '-place_of_birth'] = true"
-                                            *ngIf="!editing[rowIndex + '-place_of_birth']">
-                                            {{ value }}
-                                        </span>
-                                        <input (blur)="updateProfile($event, 'place_of_birth', rowIndex)"
-                                            *ngIf="editing[rowIndex + '-place_of_birth']" type="text"
-                                            class="form-control" [value]="value" />
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
+                                    <input (blur)="updateProfile($event, 'place_of_birth', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-place_of_birth']" type="text" class="form-control"
+                                        [value]="value" />
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
 
-                            <ngx-datatable-column [sortable]="false" name="Tanggal Lahir" prop="date_of_birth">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                    let-row="row">
-                                    <span *ngIf="!isAllowEdit">
+                        <ngx-datatable-column [sortable]="false" name="Tanggal Lahir" prop="date_of_birth">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                let-row="row">
+                                <span *ngIf="!isAllowEdit">
+                                    {{ value }}
+                                </span>
+                                <div class="inline-edit" *ngIf="isAllowEdit">
+                                    <span title="Double click to edit"
+                                        (click)="editing[rowIndex + '-date_of_birth'] = true"
+                                        *ngIf="!editing[rowIndex + '-date_of_birth']">
                                         {{ value }}
                                     </span>
-                                    <div class="inline-edit" *ngIf="isAllowEdit">
-                                        <span title="Double click to edit"
-                                            (click)="editing[rowIndex + '-date_of_birth'] = true"
-                                            *ngIf="!editing[rowIndex + '-date_of_birth']">
-                                            {{ value }}
-                                        </span>
-                                        <input (blur)="updateProfile($event, 'date_of_birth', rowIndex)"
-                                            *ngIf="editing[rowIndex + '-date_of_birth']" type="text"
-                                            class="form-control" [value]="value" />
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
+                                    <input (blur)="updateProfile($event, 'date_of_birth', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-date_of_birth']" type="text" class="form-control"
+                                        [value]="value" />
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
 
-                            <ngx-datatable-column [sortable]="false" name="Jenis Kelamin" prop="gender">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                    let-row="row">
-                                    <span *ngIf="!isAllowEdit">
+                        <ngx-datatable-column [sortable]="false" name="Jenis Kelamin" prop="gender">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                let-row="row">
+                                <span *ngIf="!isAllowEdit">
+                                    {{ value }}
+                                </span>
+                                <div class="inline-edit" *ngIf="isAllowEdit">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-gender'] = true"
+                                        *ngIf="!editing[rowIndex + '-gender']">
                                         {{ value }}
                                     </span>
-                                    <div class="inline-edit" *ngIf="isAllowEdit">
-                                        <span title="Double click to edit"
-                                            (click)="editing[rowIndex + '-gender'] = true"
-                                            *ngIf="!editing[rowIndex + '-gender']">
-                                            {{ value }}
-                                        </span>
-                                        <select (change)="updateProfile($event, 'gender', rowIndex)"
-                                            *ngIf="editing[rowIndex + '-gender']" class="form-control"
-                                            name="gender[{{rowIndex}}]">
-                                            <option value="Laki-Laki"
-                                                selected="{{'Laki-Laki' == value ? 'selected' : ''}}">
-                                                Laki-Laki</option>
-                                            <option value="Perempuan"
-                                                selected="{{'Perempuan' == value ? 'selected' : ''}}">
-                                                Perempuan</option>
-                                        </select>
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
-
-                            <ngx-datatable-column [sortable]="false" name="Status Perkawinan" prop="married_status">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                    let-row="row">
-                                    <span *ngIf="!isAllowEdit">
-                                        {{ value }}
-                                    </span>
-                                    <div class="inline-edit" *ngIf="isAllowEdit">
-                                        <span title="Double click to edit"
-                                            (click)="editing[rowIndex + '-married_status'] = true"
-                                            *ngIf="!editing[rowIndex + '-married_status']">
-                                            {{ value }}
-                                        </span>
-                                        <select (change)="updateProfile($event, 'married_status', rowIndex)"
-                                            *ngIf="editing[rowIndex + '-married_status']" class="form-control"
-                                            name="married_status[{{rowIndex}}]">
-                                            <option value="Sudah Kawin"
-                                                selected="{{'Sudah Kawin' == value ? 'selected' : ''}}">Sudah Kawin
-                                            </option>
-                                            <option value="Belum Kawin"
-                                                selected="{{'Belum Kawin' == value ? 'selected' : ''}}">Belum Kawin
-                                            </option>
-                                        </select>
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
-
-                            <ngx-datatable-column [sortable]="false" name="Alamat" prop="address">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                    let-row="row">
-                                    <span *ngIf="!isAllowEdit">
-                                        {{ value }}
-                                    </span>
-                                    <div class="inline-edit" *ngIf="isAllowEdit">
-                                        <span title="Double click to edit"
-                                            (click)="editing[rowIndex + '-address'] = true"
-                                            *ngIf="!editing[rowIndex + '-address']">
-                                            {{ value }}
-                                        </span>
-                                        <input (blur)="updateProfile($event, 'address', rowIndex)"
-                                            *ngIf="editing[rowIndex + '-address']" type="text" class="form-control"
-                                            [value]="value" />
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
-
-                            <ngx-datatable-column [sortable]="false" name="RT" prop="rt">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                    let-row="row">
-                                    <span *ngIf="!isAllowEdit">
-                                        {{ value }}
-                                    </span>
-                                    <div class="inline-edit" *ngIf="isAllowEdit">
-                                        <span title="Double click to edit" (click)="editing[rowIndex + '-rt'] = true"
-                                            *ngIf="!editing[rowIndex + '-rt']">
-                                            {{ value }}
-                                        </span>
-                                        <input (blur)="updateProfile($event, 'rt', rowIndex)"
-                                            *ngIf="editing[rowIndex + '-rt']" type="text" class="form-control"
-                                            [value]="value" />
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
-
-                            <ngx-datatable-column [sortable]="false" name="RW" prop="rw">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                    let-row="row">
-                                    <span *ngIf="!isAllowEdit">
-                                        {{ value }}
-                                    </span>
-                                    <div class="inline-edit" *ngIf="isAllowEdit">
-                                        <span title="Double click to edit" (click)="editing[rowIndex + '-rw'] = true"
-                                            *ngIf="!editing[rowIndex + '-rw']">
-                                            {{ value }}
-                                        </span>
-                                        <input (blur)="updateProfile($event, 'rw', rowIndex)"
-                                            *ngIf="editing[rowIndex + '-rw']" type="text" class="form-control"
-                                            [value]="value" />
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
-
-                            <ngx-datatable-column [sortable]="false" name="Desa" prop="village_name">
-                            </ngx-datatable-column>
-
-                            <ngx-datatable-column [sortable]="false" name="Kecamatan" prop="district_name">
-                            </ngx-datatable-column>
-
-                            <ngx-datatable-column [sortable]="false" name="TPS" [width]="100" prop="tps">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
-                                    let-value="value">
-                                    <select (change)="updateProfile($event, 'tps', rowIndex)" class="form-control"
-                                        name="tps[{{rowIndex}}]" disabled="{{isAllowEdit ? '' : 'disabled'}}">
-                                        <option value="{{val.id}}" *ngFor="let val of listTps"
-                                            selected="{{val.id == value ? 'selected' : ''}}">{{val.id}}</option>
+                                    <select (change)="updateProfile($event, 'gender', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-gender']" class="form-control"
+                                        name="gender[{{rowIndex}}]">
+                                        <option value="Laki-Laki" selected="{{'Laki-Laki' == value ? 'selected' : ''}}">
+                                            Laki-Laki</option>
+                                        <option value="Perempuan" selected="{{'Perempuan' == value ? 'selected' : ''}}">
+                                            Perempuan</option>
                                     </select>
-                                </ng-template>
-                            </ngx-datatable-column>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
 
-                            <ngx-datatable-column [sortable]="false" name="TMS" [width]="200" prop="tms">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
-                                    let-value="value">
-                                    <select (change)="updateStatus($event, 'tms', rowIndex)" class="form-control"
-                                        name="tms[rowIndex]" disabled="{{isAllowEdit ? '' : 'disabled'}}">
-                                        <option value="{{val.id}}" *ngFor="let val of listTms"
-                                            selected="{{val.id == value ? 'selected' : ''}}">{{val.name}}</option>
-                                    </select>
-                                </ng-template>
-                            </ngx-datatable-column>
-
-                            <ngx-datatable-column [sortable]="false" *ngIf="statusDataId == 1" name="Coklit"
-                                prop="is_coklit">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
-                                    let-value="value">
-                                    <div class="form-check">
-                                        <input (change)="updateCheckbox($event, 'is_coklit', rowIndex)" type="checkbox"
-                                            checked="{{value ? 'checked' : ''}}" id="is_coklit[{{rowIndex}}]" value="1"
-                                            name="is_coklit[{{rowIndex}}]" class="form-check-input"
-                                            disabled="{{isAllowEdit ? '' : 'disabled'}}" />
-                                        <label class="form-check-label" for="is_coklit[{{rowIndex}}]">
-                                            Sudah
-                                        </label>
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
-
-                            <ngx-datatable-column [sortable]="false" name="KTP EL" prop="is_ktp_el">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
-                                    let-value="value">
-                                    <div class="form-check">
-                                        <input (change)="updateCheckbox($event, 'is_ktp_el', rowIndex)" type="checkbox"
-                                            checked="{{value ? '' : 'checked'}}" id="ktp_el[{{rowIndex}}]"
-                                            name="ktp_el[{{rowIndex}}]" class="form-check-input" id="ktp_el"
-                                            disabled="{{isAllowEdit ? '' : 'disabled'}}" />
-                                        <label class="form-check-label" for="ktp_el[{{rowIndex}}]">
-                                            Belum
-                                        </label>
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
-
-                            <ngx-datatable-column [sortable]="false" name="Pemilih Baru" prop="is_new_voter">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
-                                    let-value="value">
-                                    <div class="form-check">
-                                        <input (change)="updateCheckbox($event, 'is_new_voter', rowIndex)"
-                                            type="checkbox" checked="{{value ? 'checked' : ''}}"
-                                            name="pemilih_baru[{{rowIndex}}]" id="pemilih_baru[{{rowIndex}}]"
-                                            class="form-check-input" disabled="{{isAllowEdit ? '' : 'disabled'}}" />
-                                        <label class="form-check-label" for="pemilih_baru[{{rowIndex}}]">
-                                            Ya
-                                        </label>
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
-
-                            <ngx-datatable-column [sortable]="false" name="Pemilih Pemula" prop="is_novice_voter">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
-                                    let-value="value">
-                                    <div class="form-check">
-                                        <input (change)="updateCheckbox($event, 'is_novice_voter', rowIndex)"
-                                            type="checkbox" checked="{{value ? 'checked' : ''}}"
-                                            name="pemilih_pemula[{{rowIndex}}]" class="form-check-input"
-                                            id="pemilih_pemula[{{rowIndex}}]"
-                                            disabled="{{isAllowEdit ? '' : 'disabled'}}" />
-                                        <label class="form-check-label" for="pemilih_pemula[{{rowIndex}}]">
-                                            Ya
-                                        </label>
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
-
-                            <ngx-datatable-column [sortable]="false" name="Disabilitas" prop="disabilities">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
-                                    let-value="value">
-                                    <select (change)="updateStatus($event, 'disabilities', rowIndex)"
-                                        class="form-control" name="coklit[{{rowIndex}}]"
-                                        disabled="{{isAllowEdit ? '' : 'disabled'}}">
-                                        <option value="{{val.id}}" *ngFor="let val of listDisabilitas"
-                                            selected="{{val.id == value ? 'selected' : ''}}">{{val.name}}
+                        <ngx-datatable-column [sortable]="false" name="Status Perkawinan" prop="married_status">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                let-row="row">
+                                <span *ngIf="!isAllowEdit">
+                                    {{ value }}
+                                </span>
+                                <div class="inline-edit" *ngIf="isAllowEdit">
+                                    <span title="Double click to edit"
+                                        (click)="editing[rowIndex + '-married_status'] = true"
+                                        *ngIf="!editing[rowIndex + '-married_status']">
+                                        {{ value }}
+                                    </span>
+                                    <select (change)="updateProfile($event, 'married_status', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-married_status']" class="form-control"
+                                        name="married_status[{{rowIndex}}]">
+                                        <option value="Sudah Kawin"
+                                            selected="{{'Sudah Kawin' == value ? 'selected' : ''}}">Sudah Kawin
+                                        </option>
+                                        <option value="Belum Kawin"
+                                            selected="{{'Belum Kawin' == value ? 'selected' : ''}}">Belum Kawin
                                         </option>
                                     </select>
-                                </ng-template>
-                            </ngx-datatable-column>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
 
-                            <ngx-datatable-column [sortable]="false" name="Ubah Data" prop="is_profile_updated">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
-                                    let-value="value">
-                                    <span class="text-warning text-bold" *ngIf="value">U</span>
-                                </ng-template>
-                            </ngx-datatable-column>
+                        <ngx-datatable-column [sortable]="false" name="Alamat" prop="address">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                let-row="row">
+                                <span *ngIf="!isAllowEdit">
+                                    {{ value }}
+                                </span>
+                                <div class="inline-edit" *ngIf="isAllowEdit">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-address'] = true"
+                                        *ngIf="!editing[rowIndex + '-address']">
+                                        {{ value }}
+                                    </span>
+                                    <input (blur)="updateProfile($event, 'address', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-address']" type="text" class="form-control"
+                                        [value]="value" />
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
 
-                            <ngx-datatable-column [sortable]="false" name="Status" [width]="80" prop="is_checked">
-                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
-                                    let-value="value">
-                                    <div class="form-check">
-                                        <input (change)="updateCheckbox($event, 'is_checked', rowIndex)" type="checkbox"
-                                            checked="{{value ? 'checked' : ''}}" name="status_pengecekan[{{rowIndex}}]"
-                                            class="form-check-input" id="status_pengecekan[{{rowIndex}}]"
-                                            disabled="{{isAllowEdit ? '' : 'disabled'}}" />
-                                    </div>
-                                </ng-template>
-                            </ngx-datatable-column>
-                        </ngx-datatable>
-                    </div>
+                        <ngx-datatable-column [sortable]="false" [width]="70" name="RT" prop="rt">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                let-row="row">
+                                <span *ngIf="!isAllowEdit">
+                                    {{ value }}
+                                </span>
+                                <div class="inline-edit" *ngIf="isAllowEdit">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-rt'] = true"
+                                        *ngIf="!editing[rowIndex + '-rt']">
+                                        {{ value }}
+                                    </span>
+                                    <input (blur)="updateProfile($event, 'rt', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-rt']" type="text" class="form-control"
+                                        [value]="value" />
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [sortable]="false" [width]="70" name="RW" prop="rw">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                let-row="row">
+                                <span *ngIf="!isAllowEdit">
+                                    {{ value }}
+                                </span>
+                                <div class="inline-edit" *ngIf="isAllowEdit">
+                                    <span title="Double click to edit" (click)="editing[rowIndex + '-rw'] = true"
+                                        *ngIf="!editing[rowIndex + '-rw']">
+                                        {{ value }}
+                                    </span>
+                                    <input (blur)="updateProfile($event, 'rw', rowIndex)"
+                                        *ngIf="editing[rowIndex + '-rw']" type="text" class="form-control"
+                                        [value]="value" />
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [sortable]="false" name="Desa" prop="village_name">
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [sortable]="false" name="Kecamatan" prop="district_name">
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [sortable]="false" name="TPS" [width]="100" prop="tps">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                let-value="value">
+                                <select (change)="updateProfile($event, 'tps', rowIndex)" class="form-control"
+                                    name="tps[{{rowIndex}}]" disabled="{{isAllowEdit ? '' : 'disabled'}}">
+                                    <option value="{{val.id}}" *ngFor="let val of listTps"
+                                        selected="{{val.id == value ? 'selected' : ''}}">{{val.id}}</option>
+                                </select>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [sortable]="false" name="TMS" [width]="200" prop="tms">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                let-value="value">
+                                <select (change)="updateStatus($event, 'tms', rowIndex)" class="form-control"
+                                    name="tms[rowIndex]" disabled="{{isAllowEdit ? '' : 'disabled'}}">
+                                    <option value="{{val.id}}" *ngFor="let val of listTms"
+                                        selected="{{val.id == value ? 'selected' : ''}}">{{val.name}}</option>
+                                </select>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [sortable]="false" *ngIf="statusDataId == 1" name="Coklit"
+                            prop="is_coklit" [headerClass]="'header-checkbox'">
+                            <ng-template let-row="row" ngx-datatable-header-template>
+
+                                <div class="form-check" *ngIf="isAllowEdit">
+                                    <input type="checkbox" id="isCoklit" name="isCoklit"
+                                        [(ngModel)]="massAction.isCoklit" class="form-check-input"
+                                        (click)="coklitAll()"/>
+                                    <label class="form-check-label" for="isCoklit">
+                                        Coklit
+                                    </label>
+                                </div>
+                                <strong *ngIf="!isAllowEdit">Coklit</strong>
+
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                let-value="value">
+                                <div class="form-check">
+                                    <input (change)="updateCheckbox($event, 'is_coklit', rowIndex)" type="checkbox"
+                                        checked="{{value ? 'checked' : ''}}" id="is_coklit[{{rowIndex}}]" value="1"
+                                        name="is_coklit[{{rowIndex}}]" class="form-check-input"
+                                        disabled="{{isAllowEdit ? '' : 'disabled'}}" />
+                                    <label class="form-check-label" for="is_coklit[{{rowIndex}}]">
+                                        Sudah
+                                    </label>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [sortable]="false" name="KTP EL" prop="is_ktp_el">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                let-value="value">
+                                <div class="form-check">
+                                    <input (change)="updateCheckbox($event, 'is_ktp_el', rowIndex)" type="checkbox"
+                                        checked="{{value ? '' : 'checked'}}" id="ktp_el[{{rowIndex}}]"
+                                        name="ktp_el[{{rowIndex}}]" class="form-check-input" id="ktp_el"
+                                        disabled="{{isAllowEdit ? '' : 'disabled'}}" />
+                                    <label class="form-check-label" for="ktp_el[{{rowIndex}}]">
+                                        Belum
+                                    </label>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [sortable]="false" name="Pemilih Baru" prop="is_new_voter">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                let-value="value">
+                                <div class="form-check">
+                                    <input (change)="updateCheckbox($event, 'is_new_voter', rowIndex)" type="checkbox"
+                                        checked="{{value ? 'checked' : ''}}" name="pemilih_baru[{{rowIndex}}]"
+                                        id="pemilih_baru[{{rowIndex}}]" class="form-check-input"
+                                        disabled="{{isAllowEdit ? '' : 'disabled'}}" />
+                                    <label class="form-check-label" for="pemilih_baru[{{rowIndex}}]">
+                                        Ya
+                                    </label>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [sortable]="false" name="Pemilih Pemula" prop="is_novice_voter">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                let-value="value">
+                                <div class="form-check">
+                                    <input (change)="updateCheckbox($event, 'is_novice_voter', rowIndex)"
+                                        type="checkbox" checked="{{value ? 'checked' : ''}}"
+                                        name="pemilih_pemula[{{rowIndex}}]" class="form-check-input"
+                                        id="pemilih_pemula[{{rowIndex}}]"
+                                        disabled="{{isAllowEdit ? '' : 'disabled'}}" />
+                                    <label class="form-check-label" for="pemilih_pemula[{{rowIndex}}]">
+                                        Ya
+                                    </label>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [sortable]="false" name="Disabilitas" prop="disabilities">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                let-value="value">
+                                <select (change)="updateStatus($event, 'disabilities', rowIndex)" class="form-control"
+                                    name="coklit[{{rowIndex}}]" disabled="{{isAllowEdit ? '' : 'disabled'}}">
+                                    <option value="{{val.id}}" *ngFor="let val of listDisabilitas"
+                                        selected="{{val.id == value ? 'selected' : ''}}">{{val.name}}
+                                    </option>
+                                </select>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [sortable]="false" name="Ubah Data" prop="is_profile_updated">
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                let-value="value">
+                                <span class="text-warning text-bold" *ngIf="value">U</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [sortable]="false" [headerClass]="'header-checkbox'" name="Status"
+                            [width]="80" prop="is_checked">
+                            <ng-template let-row="row" ngx-datatable-header-template>
+
+                                <div class="form-check" *ngIf="isAllowEdit">
+                                    <input type="checkbox" id="isChecked" value="1" name="isChecked"
+                                        [(ngModel)]="massAction.isChecked" class="form-check-input"
+                                        (click)="checklistAll()" />
+                                    <label class="form-check-label" for="isChecked">
+                                        Cek
+                                    </label>
+                                </div>
+                                <strong *ngIf="!isAllowEdit">Cek</strong>
+
+                            </ng-template>
+
+                            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                let-value="value">
+                                <div class="form-check">
+                                    <input (change)="updateCheckbox($event, 'is_checked', rowIndex)" type="checkbox"
+                                        checked="{{value ? 'checked' : ''}}" name="status_pengecekan[{{rowIndex}}]"
+                                        class="form-check-input" id="status_pengecekan[{{rowIndex}}]"
+                                        disabled="{{isAllowEdit ? '' : 'disabled'}}" />
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                    </ngx-datatable>
+
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
-<div id="footer" *ngIf="isAllowEdit">
-    <div class="row">
-        <div class="col-md-12 text-right">
-            <button class="btn btn-primary" (click)="openModal(modalConfirm)">
-                <em class="fa fa-save"></em>&nbsp;
-                Setorkan Data
-            </button>
         </div>
     </div>
 </div>

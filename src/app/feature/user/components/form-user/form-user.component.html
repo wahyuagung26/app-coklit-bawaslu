@@ -16,7 +16,7 @@
     <div class="form-group row">
         <label class="col-md-4">No. Telepon / HP</label>
         <div class="col-md-8">
-            <input [(ngModel)]="formModel.phone_number" type="text" name="phone_number" class="form-control"
+            <input [(ngModel)]="formModel.phone_number" type="number" name="phone_number" class="form-control"
                 placeholder="No Telepon">
         </div>
     </div>
@@ -38,26 +38,24 @@
             </select>
         </div>
     </div>
-    <div class="form-group row">
-        <!-- <div class="form-group row" *ngIf="formModel.role == 'admin desa' || formModel.role == 'admin kecamatan'"> -->
+    <!-- <div class="form-group row"> -->
+    <div class="form-group row" *ngIf="formModel.role == 'admin desa' || formModel.role == 'admin kecamatan'">
         <label class="col-md-4 required">Kecamatan</label>
         <div class="col-md-8">
             <select class="form-control" name="district_id" [(ngModel)]="formModel.district_id"
                 (change)="getVillages(formModel.district_id)" disabled="{{userLogin?.role == 'admin kecamatan'}}">
-                <option *ngFor="let district of districts;" value="{{district.id}}"
-                    selected="{{district.id == userLogin?.district_id ? 'selected' : ''}}">
+                <option *ngFor="let district of districts;" value="{{district.id}}">
                     {{district.district_name}}
                 </option>
             </select>
         </div>
     </div>
-    <div class="form-group row">
-        <!-- <div class="form-group row" *ngIf="formModel.role == 'admin desa'"> -->
+    <!-- <div class="form-group row"> -->
+    <div class="form-group row" *ngIf="formModel.role == 'admin desa'">
         <label class="col-md-4 required">Desa / Kelurahan</label>
         <div class="col-md-8">
             <select class="form-control" name="village_id" [(ngModel)]="formModel.village_id">
-                <option *ngFor="let village of villages;" value="{{village.id}}"
-                    selected="{{village.id == userLogin?.village_id ? 'selected' : ''}}">{{village.village_name}}
+                <option *ngFor="let village of villages;" value="{{village.id}}">{{village.village_name}}
                 </option>
             </select>
         </div>

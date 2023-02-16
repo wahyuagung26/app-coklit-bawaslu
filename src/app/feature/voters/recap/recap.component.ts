@@ -37,16 +37,14 @@ export class RecapComponent implements OnInit {
         this.villageId = this.userLogin.village_id;
         this.villageName = (this.userLogin?.village_name ?? '').toLowerCase();
         this.districtId = this.userLogin?.district_id;
-
-        this.getDistricts();
     }
 
-    ngOnInit(): void {
+    async ngOnInit() {
         this.statusData = environment.statusData;
         this.summaries = [];
 
         this.resetFilter();
-        this.getRecap();
+        this.getDistricts();
         this.getStatusData();
     }
 
@@ -67,8 +65,27 @@ export class RecapComponent implements OnInit {
         window.open(`${environment.apiURL}/v1/summaries/${this.filter.status_data_id}/export/excel?village_id=${this.filter.village_id}&district_id=${this.filter.district_id}`);
     }
 
+    setVillageName() {
+        if (this.villages) {
+            this.villageName = this.villages.find(item => this.filter.village_id == item.id)?.village_name;
+        }
+    }
+
+    setDistrictName() {
+        if (this.districts) {
+            this.districtName = this.districts.find(item => this.filter.district_id == item.id)?.district_name;
+        }
+    }
+
     getRecap() {
-        this.voterService.getRecap(this.filter.status_data_id).subscribe((resp: any) => {
+
+        this.setVillageName();
+        this.setDistrictName();
+
+        this.villageId = this.filter.village_id;
+        this.districtId = this.filter.district_id;
+
+        this.voterService.getRecap(this.filter.status_data_id, this.filter).subscribe((resp: any) => {
             this.summaries = resp.data;
         }, err => {
             console.log(err);
@@ -90,6 +107,16 @@ export class RecapComponent implements OnInit {
     getVillages(districtsId) {
         this.regionService.getVillages(districtsId).subscribe((res: any) => {
             this.villages = res.data;
+
+            if (this.userLogin.role == 'admin desa') {
+                this.filter.village_id = this.userLogin.village_id;
+            } else {
+                this.filter.village_id = res.data?.[0]?.id;
+                // set default params from first array
+                this.villageName = res.data?.[0]?.village_name;
+                this.villageId = res.data?.[0]?.id;
+                this.districtId = res.data?.[0]?.district_id;
+            }
         }, err => {
             console.log(err);
         });
