@@ -5,6 +5,7 @@ pipeline {
         SSH_HOST     = '185.187.241.21'
         SSH_PORT     = '65002'
         SSH_PROJECT_DIRECTORY     = 'public_html/public_html/portofolio/bawaslu-app'
+        SERVER_PASSWORD = 'Wahyuagung052*'
     }
      stages {
         stage('Build Development') {
@@ -20,7 +21,8 @@ pipeline {
                     branch 'main';
                 }
                 steps {
-                    sh 'mkdir -p dist'
+                    sh 'echo "${SERVER_PASSWORD}" | sudo -S command'
+                    sh 'sudo mkdir -p dist'
                     sh 'sudo chmod -R 755 dist'
                     sh 'npm install'
                     sh 'npm run build'
