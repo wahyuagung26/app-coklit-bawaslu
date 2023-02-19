@@ -20,6 +20,8 @@ pipeline {
                     branch 'main';
                 }
                 steps {
+                    sh 'mkdir dist'
+                    sh 'sudo chmod -R 777 dist'
                     sh 'npm install'
                     sh 'npm run build'
                }
