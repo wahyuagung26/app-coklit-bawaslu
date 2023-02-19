@@ -21,9 +21,9 @@ pipeline {
                     branch 'main';
                 }
                 steps {
-                    sh 'ssh -t remotehost "sudo <cmd>"'
-                    sh 'sudo mkdir -p dist'
-                    sh 'sudo chmod -R 755 dist'
+                    // sh 'ssh -t remotehost "sudo <cmd>"'
+                    // sh 'sudo mkdir -p dist'
+                    // sh 'sudo chmod -R 755 dist'
                     sh 'npm install'
                     sh 'npm run build'
                }
