@@ -21,7 +21,7 @@ pipeline {
                     branch 'main';
                 }
                 steps {
-                    sh 'echo "${SERVER_PASSWORD}" | sudo -S command'
+                    sh 'ssh -t remotehost "sudo <cmd>"'
                     sh 'sudo mkdir -p dist'
                     sh 'sudo chmod -R 755 dist'
                     sh 'npm install'
