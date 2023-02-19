@@ -21,7 +21,7 @@ pipeline {
                 }
                 steps {
                     sh 'mkdir dist'
-                    sh 'sudo chmod -R 777 dist'
+                    sh 'sudo chmod -R 755 dist'
                     sh 'npm install'
                     sh 'npm run build'
                }
