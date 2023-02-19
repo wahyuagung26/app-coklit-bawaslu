@@ -14,6 +14,7 @@ pipeline {
                 }
                 steps {
                     sh 'npm install'
+                    sh 'npm run build'
                }
         }
          stage('Build Production') {
@@ -21,9 +22,6 @@ pipeline {
                     branch 'main';
                 }
                 steps {
-                    // sh 'ssh -t remotehost "sudo <cmd>"'
-                    // sh 'sudo mkdir -p dist'
-                    // sh 'sudo chmod -R 755 dist'
                     sh 'npm install'
                     sh 'npm run build'
                }
@@ -44,7 +42,9 @@ pipeline {
                 }
                 steps {
                     sshagent(['ssh-app-bawaslu']) {
-                         echo 'deploy to development'
+                        sh 'ssh -o StrictHostKeyChecking=no -p ${SSH_PORT} -l ${SSH_USERNAME} ${SSH_HOST} rm -rf ${SSH_PROJECT_DIRECTORY}'
+                        sh 'ssh -o StrictHostKeyChecking=no -p ${SSH_PORT} -l ${SSH_USERNAME} ${SSH_HOST} mkdir ${SSH_PROJECT_DIRECTORY}'
+                        sh 'scp -r dist/* -p ${SSH_PORT} ${SSH_USERNAME}@${SSH_HOST}:/${SSH_PROJECT_DIRECTORY}'
                     }
                }
           }
