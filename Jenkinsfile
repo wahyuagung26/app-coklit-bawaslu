@@ -44,7 +44,7 @@ pipeline {
                     sshagent(['ssh-app-bawaslu']) {
                         sh 'ssh -o StrictHostKeyChecking=no -p ${SSH_PORT} -l ${SSH_USERNAME} ${SSH_HOST} rm -rf ${SSH_PROJECT_DIRECTORY}'
                         sh 'ssh -o StrictHostKeyChecking=no -p ${SSH_PORT} -l ${SSH_USERNAME} ${SSH_HOST} mkdir ${SSH_PROJECT_DIRECTORY}'
-                        sh 'scp -p ${SSH_PORT} -r dist/ ${SSH_USERNAME}@${SSH_HOST}:/${SSH_PROJECT_DIRECTORY}'
+                        sh 'scp -r dist/ ${SSH_USERNAME}@${SSH_HOST}:${SSH_PORT}/${SSH_PROJECT_DIRECTORY}'
                     }
                }
           }
