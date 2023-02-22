@@ -1,8 +1,8 @@
 
 export const environment = {
     production: true,
-    apiURL: 'https://api-bawaslu.wahyuagung.id/api',
-    baseUrl: 'https://bawaslu.wahyuagung.id',
+    apiURL: 'http://node15919-bwsmalang.jh-beon.cloud:11101/api',
+    baseUrl: 'http://node15919-bwsmalang.jh-beon.cloud:11101/',
     statusData: [
         {
             id: 1,
