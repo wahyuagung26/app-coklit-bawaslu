@@ -3,8 +3,12 @@
         <div class="col-md-9">
             <h1 class="page-title">{{statusDataName}} - Desa/Kelurahan {{villageName}} Kec. {{districtName}}</h1>
         </div>
-        <div class="col-md-3 text-right" *ngIf="isAllowEdit">
-            <a class="btn btn-primary" id="btn-add" [routerLink]="['/add-voter', statusDataId]">
+        <div class="col-md-3 text-right">
+            <input type="file" (change)="import($event)" (click)="$event.target.value = ''" style="display: none;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"  #filePicker/>
+            <button type="button" (click)="filePicker.click()" class="btn btn-success"
+                *ngIf="userLogin.role == 'admin kecamatan' && statusDataId == 1"><em class="fa fa-file-upload"></em>
+                Import (*.xlsx)</button>
+            <a class="btn btn-primary" id="btn-add" [routerLink]="['/add-voter', statusDataId]" *ngIf="isAllowEdit">
                 <em class="fa fa-plus"></em> Tambah Pemilih
             </a>
         </div>
@@ -380,7 +384,7 @@
                                 <div class="form-check" *ngIf="isAllowEdit">
                                     <input type="checkbox" id="isCoklit" name="isCoklit"
                                         [(ngModel)]="massAction.isCoklit" class="form-check-input"
-                                        (click)="coklitAll()"/>
+                                        (click)="coklitAll()" />
                                     <label class="form-check-label" for="isCoklit">
                                         Coklit
                                     </label>

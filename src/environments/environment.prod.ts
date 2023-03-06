@@ -1,8 +1,8 @@
 
 export const environment = {
     production: true,
-    apiURL: 'http://node15919-bwsmalang.jh-beon.cloud:11101/api',
-    baseUrl: 'http://node15919-bwsmalang.jh-beon.cloud:11101/',
+    apiURL: '/api',
+    baseUrl: '',
     statusData: [
         {
             id: 1,

@@ -50,6 +50,7 @@
 	height: 100vh;
 	border-radius: 0;
 	padding: 0 10px;
+    flex: inherit;
 }
 
 .full-height .modal-content .modal-footer {
@@ -62,8 +63,9 @@
 }
 
 .full-height .modal-content .modal-body {
-	height: calc(100vh - 122px);
-	overflow-y: scroll;
+    height: calc(100vh - 142px);
+    overflow-y: scroll;
+    flex: inherit;
 }
 
 body.modal-open {

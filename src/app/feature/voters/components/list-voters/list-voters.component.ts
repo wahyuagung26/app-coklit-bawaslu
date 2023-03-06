@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Observable, ReplaySubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { VotersService } from '../../services/voters.service';
@@ -18,12 +19,14 @@ import { LoaderService } from 'src/app/core/services/loader.service';
 export class ListVotersComponent implements OnInit {
     DEFAULT_ERROR_MESSAGE = 'Server sedang sibuk coba lagi nanti';
 
+    base64Output: string;
     modalReference: any;
     page: {
         total_item: any,
         page: any,
         per_page: any,
     };
+    fileUpload: any;
     editing: any;
     statusDataId: number;
     statusDataName: string;
@@ -125,6 +128,7 @@ export class ListVotersComponent implements OnInit {
     }
 
     resetPayload() {
+        this.fileUpload = null;
         this.filter = {
             name: '',
             nik: '',
@@ -171,6 +175,30 @@ export class ListVotersComponent implements OnInit {
 
     export() {
         window.open(`${environment.apiURL}/v1/voters/${this.statusDataId}/export/excel?village_id=${this.villageId}&district_id=${this.districtId}`);
+    }
+
+    import(event) {
+        if (event.target.files[0]) {
+            this.convertFile(event.target.files[0]).subscribe(base64 => {
+                this.loaderService.show();
+                this.votersService.uploadFile(base64).subscribe((res: any) => {
+                    setTimeout(() => {
+                        this.loaderService.show();
+                        this.votersService.runImport(this.districtId).subscribe((res: any) => {
+                            this.coreService.alertSuccess('Berhasil', res.message);
+                        });
+                    }, 1000)
+                });
+            });
+        }
+    }
+
+    convertFile(file: File): Observable<string> {
+        const result = new ReplaySubject<string>(1);
+        const reader = new FileReader();
+        reader.readAsBinaryString(file);
+        reader.onload = (event) => result.next(btoa(event.target.result.toString()));
+        return result;
     }
 
     getTotalCoklit() {

@@ -1,8 +1,8 @@
 
 export const environment = {
     production: false,
-    apiURL: 'http://svc-bawaslu.test/api',
-    baseUrl: 'http://svc-bawaslu.test/',
+    apiURL: 'http://svc-bawaslu.test',
+    baseUrl: '',
     statusData: [
         {
             id: 1,
