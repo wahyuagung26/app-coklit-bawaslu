@@ -4,9 +4,9 @@
             <h1 class="page-title">Tambah {{statusDataName}}</h1>
         </div>
         <div class="col-md-12">
-            <div class="card card-transparent">
-                <div class="card-body">
-                    <form>
+            <form>
+                <div class="card card-transparent">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-sm-6 col-md-4 col-sm-12">
                                 <div class="form-group row">
@@ -44,7 +44,7 @@
                                         Lahir</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="date_of_bith" id="date_of_bith"
-                                            [(ngModel)]="formModel.date_of_birth" placeholder="Masukkan Tanggal Lahir">
+                                            [(ngModel)]="formModel.date_of_birth" placeholder="Contoh 2022-02-01">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -105,8 +105,10 @@
                                     <div class="col-sm-8">
                                         <select class="form-control" name="district_id"
                                             [(ngModel)]="formModel.district_id"
-                                            (change)="getVillages(formModel.district_id)" disabled="{{userLogin.role == 'admin desa' || userLogin.role == 'admin kecamatan'}}">
-                                            <option *ngFor="let district of districts;" value="{{district.id}}" selected="{{userLogin?.district_id == district.id ? 'selected' : ''}}">
+                                            (change)="getVillages(formModel.district_id)"
+                                            disabled="{{userLogin.role == 'admin desa' || userLogin.role == 'admin kecamatan'}}">
+                                            <option *ngFor="let district of districts;" value="{{district.id}}"
+                                                selected="{{userLogin?.district_id == district.id ? 'selected' : ''}}">
                                                 {{district.district_name}}</option>
                                         </select>
                                     </div>
@@ -115,8 +117,10 @@
                                     <label for="desa" class="col-sm-4 col-form-label required">Desa/Kelurahan</label>
                                     <div class="col-sm-8">
                                         <select class="form-control" name="village_id"
-                                            [(ngModel)]="formModel.village_id" disabled="{{userLogin.role == 'admin desa'}}">
-                                            <option *ngFor="let village of villages;" value="{{village.id}}" selected="{{userLogin?.village_id == village.id ? 'selected' : ''}}">
+                                            [(ngModel)]="formModel.village_id"
+                                            disabled="{{userLogin.role == 'admin desa'}}">
+                                            <option *ngFor="let village of villages;" value="{{village.id}}"
+                                                selected="{{userLogin?.village_id == village.id ? 'selected' : ''}}">
                                                 {{village.village_name}}</option>
                                         </select>
                                     </div>
@@ -213,14 +217,15 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
+                    <div class="card-footer text-right">
+                        <a class="btn btn-light mr-2" [routerLink]="['/voters', statusDataId]"><em
+                                class="fa fa-arrow-left"></em> Kembali</a>
+                        <button class="btn btn-primary" type="submit" (keyup.enter)="save()" (click)="save()"><em
+                                class="fa fa-save"></em> Simpan</button>
+                    </div>
                 </div>
-                <div class="card-footer text-right">
-                    <a class="btn btn-light mr-2" [routerLink]="['/voters', statusDataId]"><em
-                            class="fa fa-arrow-left"></em> Kembali</a>
-                    <button class="btn btn-primary" (click)="save()"><em class="fa fa-save"></em> Simpan</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

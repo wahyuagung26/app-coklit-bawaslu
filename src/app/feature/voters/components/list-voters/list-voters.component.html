@@ -49,9 +49,9 @@
                         <div class="row">
                             <div class="col-md-2 col-sm-2">
                                 <div class="form-group">
-                                    <label for="nik">NIK</label>
+                                    <label for="nik">NIK / Nama</label>
                                     <input type="text" class="form-control" id="nik" [(ngModel)]="filter.nik" name="nik"
-                                        placeholder="Cari NIK">
+                                        placeholder="Cari NIK / Nama">
                                 </div>
                             </div>
                             <div class="col-md-2 col-sm-2" *ngIf="userLogin.role != 'admin desa'">
@@ -535,7 +535,7 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-light" (click)="modal.close('Save click')">Batalkan</button>
         <button type="button" class="btn btn-primary" (click)="saveAndLock()"
-            *ngIf="totalUnchecked == 0 || (totalUnCoklit == 0 && statusDataId == 1)"><em class="fa fa-key"></em>&nbsp;
+            *ngIf="(totalUnchecked == 0 && totalUnCoklit == 0 && statusDataId == 1) || (totalUnchecked == 0 && statusDataId > 1)"><em class="fa fa-key"></em>&nbsp;
             Lanjut Setor dan Kunci Data
             Pemilih</button>
     </div>

@@ -46,8 +46,8 @@ export class VotersService extends CoreService {
         return this.DataPost(`/v1/tools/import/upload`, {file: base64});
     }
 
-    runImport(districtId) {
-        return this.DataPost(`/v1/tools/import/run`, {district_id: districtId, is_reset: true, is_pra_dps: true});
+    runImport(districtId, villageId) {
+        return this.DataPost(`/v1/tools/import/run`, {district_id: districtId, village_id: villageId, is_reset: true, is_pra_dps: true});
     }
 
     getDisabilities() {

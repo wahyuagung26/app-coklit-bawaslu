@@ -10,6 +10,8 @@ import { FeatureRoutingModule } from './feature-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserModule } from './user/user.module';
 import { VotersModule } from './voters/voters.module';
+import { ListStatusDataComponent } from './status-data/components/list-status-data/list-status-data.component';
+import { DataTablesModule } from 'angular-datatables';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
@@ -17,7 +19,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 };
 
 @NgModule({
-    declarations: [DashboardComponent],
+    declarations: [DashboardComponent, ListStatusDataComponent],
     imports: [
         ReactiveFormsModule,
         NgbAlertModule,
@@ -29,7 +31,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         VotersModule,
         RouterModule,
         FormsModule,
-        NgbModule
+        NgbModule,
+        DataTablesModule
     ],
     providers: [
         {

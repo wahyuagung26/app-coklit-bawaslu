@@ -184,7 +184,7 @@ export class ListVotersComponent implements OnInit {
                 this.votersService.uploadFile(base64).subscribe((res: any) => {
                     setTimeout(() => {
                         this.loaderService.show();
-                        this.votersService.runImport(this.districtId).subscribe((res: any) => {
+                        this.votersService.runImport(this.districtId, this.villageId).subscribe((res: any) => {
                             this.coreService.alertSuccess('Berhasil', res.message);
                         });
                     }, 1000)
@@ -358,7 +358,7 @@ export class ListVotersComponent implements OnInit {
                     this.filter.district_id = val.district_id;
                 }
 
-                if (this.userLogin.role == 'admin desa' && this.userLogin.village_id == val.id && this.userLogin.last_data_status_id == val.last_data_status_id) {
+                if (this.userLogin.role == 'admin desa' && this.userLogin.village_id == val.id && this.userLogin.last_data_status_id == this.statusDataId) {
                     this.isAllowEdit = true;
                 }
 

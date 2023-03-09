@@ -51,6 +51,12 @@
                     Data User
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/status-data']" *ngIf="checkAccess('admin kecamatan|admin kabupaten|super admin')" (click)="onMenuClick($event)" href="javascript: void(0);"
+                    id="topnav-components" role="button">
+                    Status Data
+                </a>
+            </li>
             <li class="nav-item dropdown" ngbDropdown>
                 <a class="nav-link dropdown-toggle" (click)="onMenuClick($event)" href="javascript: void(0);"
                     id="topnav-components" role="button" ngbDropdownToggle>
