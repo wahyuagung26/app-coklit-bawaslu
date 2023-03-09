@@ -12,7 +12,6 @@
                                 <div class="form-group">
                                     <label>Kecamatan</label>
                                     <select class="form-control" name="district_id" [(ngModel)]="filter.district_id"
-                                        (change)="getVillages(filter.district_id)"
                                         disabled="{{userLogin.role == 'admin desa' || userLogin.role == 'admin kecamatan'}}">
                                         <option *ngFor="let district of districts;" value="{{district.id}}"
                                             selected="{{userLogin?.district_id == district.id ? 'selected' : ''}}">
@@ -20,17 +19,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-4 col-sm-4">
-                                <div class="form-group">
-                                    <label>Desa / Kelurahan</label>
-                                    <select class="form-control" name="village_id" [(ngModel)]="filter.village_id"
-                                        disabled="{{userLogin.role == 'admin desa'}}">
-                                        <option *ngFor="let village of villages;" value="{{village.id}}"
-                                            selected="{{userLogin?.village_id == village.id ? 'selected' : ''}}">
-                                            {{village.village_name}}</option>
-                                    </select>
-                                </div>
-                            </div> -->
                             <div class="col-md-4 col-sm-4">
                                 <label for="button">&nbsp;</label>
                                 <div id="button">
