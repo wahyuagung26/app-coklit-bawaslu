@@ -1,0 +1,231 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="page-title">Tambah {{statusDataName}}</h1>
+        </div>
+        <div class="col-md-12">
+            <form>
+                <div class="card card-transparent">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-4 col-sm-12">
+                                <div class="form-group row">
+                                    <label for="nik" class="col-sm-4 col-form-label required">NIK</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="nik" id="nik"
+                                            [(ngModel)]="formModel.nik" placeholder="Masukkan NIK">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="nkk" class="col-sm-4 col-form-label required">No KK</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="nkk" id="nkk"
+                                            [(ngModel)]="formModel.nkk" placeholder="Masukkan No KK">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="name" class="col-sm-4 col-form-label required">Nama</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="name" id="name"
+                                            [(ngModel)]="formModel.name" placeholder="Masukkan Nama">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="place_of_birth" class="col-sm-4 col-form-label required">Tempat
+                                        Lahir</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="place_of_birth"
+                                            id="place_of_birth" [(ngModel)]="formModel.place_of_birth"
+                                            placeholder="Masukkan Tempat Lahir">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="date_of_bith" class="col-sm-4 col-form-label required">Tanggal
+                                        Lahir</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="date_of_bith" id="date_of_bith"
+                                            [(ngModel)]="formModel.date_of_birth" placeholder="Contoh 2022-02-01">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="jenis_kelamin" class="col-sm-4 col-form-label required">Jenis
+                                        Kelamin</label>
+                                    <div class="col-sm-8">
+                                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="gender"
+                                            [(ngModel)]="formModel.gender">
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="1"> Laki-Laki
+                                            </label>
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="2"> Perempuan
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="status_kawin" class="col-sm-4 col-form-label required">Status
+                                        Kawin</label>
+                                    <div class="col-sm-8">
+                                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="married_status"
+                                            [(ngModel)]="formModel.married_status">
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="1"> Belum
+                                            </label>
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="2"> Sudah
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4 col-sm-12">
+                                <div class="form-group row">
+                                    <label for="address" class="col-sm-4 col-form-label required">Alamat</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="address" id="address"
+                                            [(ngModel)]="formModel.address" placeholder="Masukkan Alamat">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="rt" class="col-sm-4 col-form-label required">RT</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="rt" id="rt"
+                                            [(ngModel)]="formModel.rt" placeholder="Masukkan RT">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="rw" class="col-sm-4 col-form-label required">Rw</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="rw" id="rw"
+                                            [(ngModel)]="formModel.rw" placeholder="Masukkan RW">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="kecamatan" class="col-sm-4 col-form-label required">Kecamatan</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" name="district_id"
+                                            [(ngModel)]="formModel.district_id"
+                                            (change)="getVillages(formModel.district_id)"
+                                            disabled="{{userLogin.role == 'admin desa' || userLogin.role == 'admin kecamatan'}}">
+                                            <option *ngFor="let district of districts;" value="{{district.id}}"
+                                                selected="{{userLogin?.district_id == district.id ? 'selected' : ''}}">
+                                                {{district.district_name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="desa" class="col-sm-4 col-form-label required">Desa/Kelurahan</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" name="village_id"
+                                            [(ngModel)]="formModel.village_id"
+                                            disabled="{{userLogin.role == 'admin desa'}}">
+                                            <option *ngFor="let village of villages;" value="{{village.id}}"
+                                                selected="{{userLogin?.village_id == village.id ? 'selected' : ''}}">
+                                                {{village.village_name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="tps" class="col-sm-4 col-form-label required">TPS</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="tps" name="tps" [(ngModel)]="formModel.tps"
+                                            placeholder="Cari Berdasar TPS">
+                                            <option *ngFor="let val of listTps" value="{{val.id}}">{{val.id}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="status_coklit" class="col-sm-4 col-form-label required">Status
+                                        Coklit</label>
+                                    <div class="col-sm-8">
+                                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="is_coklit"
+                                            [(ngModel)]="formModel.is_coklit">
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="1"> Sudah
+                                            </label>
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="0"> Belum
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4 col-sm-12">
+                                <div class="form-group row">
+                                    <label for="ktp_elektronik" class="col-sm-4 col-form-label required">KTP
+                                        Elektronik</label>
+                                    <div class="col-sm-8">
+                                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="is_ktp_el"
+                                            [(ngModel)]="formModel.is_ktp_el">
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="1"> Sudah
+                                            </label>
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="0"> Belum
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="pemilih_baru" class="col-sm-4 col-form-label required">Pemilih
+                                        Baru</label>
+                                    <div class="col-sm-8">
+                                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="is_new_voter"
+                                            [(ngModel)]="formModel.is_new_voter">
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="1"> Ya
+                                            </label>
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="0"> Bukan
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="pemilih_pemula" class="col-sm-4 col-form-label required">Pemilih
+                                        Pemula</label>
+                                    <div class="col-sm-8">
+                                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="is_novice_voter"
+                                            [(ngModel)]="formModel.is_novice_voter">
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="1"> Ya
+                                            </label>
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" value="0"> Bukan
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="tms" class="col-sm-4 col-form-label">TMS</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="tms" name="tms" [(ngModel)]="formModel.tms"
+                                            placeholder="TMS">
+                                            <option *ngFor="let val of listTms" value="{{val.id}}">{{val.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="disabilitas" class="col-sm-4 col-form-label">Disabilitas</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="tms" name="disabilities"
+                                            [(ngModel)]="formModel.disabilities" placeholder="Pilih Disabilitas">
+                                            <option *ngFor="let val of listDisabilitas" value="{{val.id}}">{{val.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-right">
+                        <a class="btn btn-light mr-2" [routerLink]="['/voters', statusDataId]"><em
+                                class="fa fa-arrow-left"></em> Kembali</a>
+                        <button class="btn btn-primary" type="submit" (keyup.enter)="save()" (click)="save()"><em
+                                class="fa fa-save"></em> Simpan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

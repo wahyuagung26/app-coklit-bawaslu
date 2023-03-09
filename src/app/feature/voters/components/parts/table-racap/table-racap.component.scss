@@ -1,0 +1,52 @@
+table th,
+table td {
+	min-width: 70px;
+}
+
+table thead th {
+	background: #dab96c;
+	color: #fff;
+}
+
+.datatable-recap {
+	height: 450px;
+}
+
+.table-scroll {
+	position: relative;
+	width: 100%;
+	z-index: 1;
+	margin: auto;
+	overflow: auto;
+	height: 450px;
+}
+.table-scroll table {
+	width: 100%;
+	margin: auto;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+.table-wrap {
+	position: relative;
+}
+.table-scroll th,
+.table-scroll td {
+	padding: 5px 10px;
+	vertical-align: top;
+}
+.table-scroll thead th {
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+}
+/* safari and ios need the tfoot itself to be position:sticky also */
+.table-scroll tfoot,
+.table-scroll tfoot th,
+.table-scroll tfoot td {
+	position: -webkit-sticky;
+	position: sticky;
+	bottom: 0;
+	background: #dab96c;
+	color: #fff;
+	z-index: 4;
+}

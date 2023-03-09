@@ -1,0 +1,67 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-title">Status Data</h1>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4">
+                                <div class="form-group">
+                                    <label>Kecamatan</label>
+                                    <select class="form-control" name="district_id" [(ngModel)]="filter.district_id"
+                                        disabled="{{userLogin.role == 'admin desa' || userLogin.role == 'admin kecamatan'}}">
+                                        <option *ngFor="let district of districts;" value="{{district.id}}"
+                                            selected="{{userLogin?.district_id == district.id ? 'selected' : ''}}">
+                                            {{district.district_name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <label for="button">&nbsp;</label>
+                                <div id="button">
+                                    <button type="button" class="btn btn-light mr-2" (click)="reloadDataTable()"><em
+                                            class="fa fa-search"></em>
+                                        Cari
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card card-transparent">
+                <div class="card-body">
+                    <table class="table table-hover" datatable [dtOptions]="dtOptions">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Kecamatan</th>
+                                <th>Desa / Kelurahan</th>
+                                <th>Status Data</th>
+                                <th>Sudah Dicek</th>
+                                <th>Belum Dicek</th>
+                                <th [width]="75"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let status of listStatusData;">
+                                <td>{{status.district_name}}</td>
+                                <td>{{status.village_name}}</td>
+                                <td>{{status.name}}</td>
+                                <td>{{status.total_checked}}</td>
+                                <td>{{status.total_unchecked}}</td>
+                                <td class="vertical-middle text-right">
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

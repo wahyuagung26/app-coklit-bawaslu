@@ -1,0 +1,81 @@
+<nav class="navbar navbar-expand-lg bg-light shadow" id="page-topbar">
+    <div class="container-fluid navbar-top">
+        <a class="navbar-brand xs-hidden" style="padding: 0" href="#">
+            <div>
+                <img src="assets/images/logo.png" alt="" height="22" />
+            </div>
+            <div class="navbar-brand-text">
+                <span class="header-title">
+                    Bawaslu Kab. Malang
+                </span>
+                <span class="header-subtitle">
+                    {{title}}
+                </span>
+            </div>
+        </a>
+
+        <button class="navbar-toggler" type="button" (click)="toggleMenubar()" data-toggle="collapse" data-target="#main-navbar"
+            aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <em class="fa fa-fw fa-bars"></em>
+        </button>
+
+        <div class="d-flex mobile-profile">
+            <div class="dropdown d-none d-lg-inline-block ml-1">
+                <button type="button" class="btn header-item noti-icon" data-toggle="fullscreen" (click)="fullscreen()">
+                    <em class="bx bx-fullscreen text-dark"></em>
+                </button>
+            </div>
+            <div class="dropdown d-inline-block" ngbDropdown>
+                <button type="button" class="btn header-item text-dark" id="page-header-user-dropdown"
+                    ngbDropdownToggle>
+                    <img class="rounded-circle header-profile-user" *ngIf="userLogin.foto_url"
+                        src="{{userLogin.foto_url}}" alt="User Avatar" />
+                    <em *ngIf="!userLogin.foto_url" class="fa fa-user"></em>
+                    <span class="d-none d-xl-inline-block ml-1">{{userLogin.nama}}</span>
+                    <em class="mdi mdi-chevron-down d-none d-xl-inline-block"></em>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                    <a class="dropdown-item text-danger" href="javascript: void(0);" (click)="logout()">
+                        <em class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></em>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="collapse navbar-menu navbar-collapse" id="topnav-menu-content">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/users']" *ngIf="checkAccess('admin kecamatan|admin kabupaten|super admin')" (click)="onMenuClick($event)" href="javascript: void(0);"
+                    id="topnav-components" role="button">
+                    Data User
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/status-data']" *ngIf="checkAccess('admin kecamatan|admin kabupaten|super admin')" (click)="onMenuClick($event)" href="javascript: void(0);"
+                    id="topnav-components" role="button">
+                    Status Data
+                </a>
+            </li>
+            <li class="nav-item dropdown" ngbDropdown>
+                <a class="nav-link dropdown-toggle" (click)="onMenuClick($event)" href="javascript: void(0);"
+                    id="topnav-components" role="button" ngbDropdownToggle>
+                    Data Pemilih
+                    <div class="arrow-down"></div>
+                </a>
+                <div class="dropdown-menu row" ngbDropdownMenu>
+                    <div *ngFor="let voter of env.statusData">
+                        <a class="col dropdown-item side-nav-link-ref" [routerLink]="['/voters', voter.id]"
+                            [ngClass]="userLogin.last_data_status_id < voter.id && userLogin.role == 'admin desa' ? 'disabled' : ''">{{voter.text}}</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/recapitulation']" (click)="onMenuClick($event)"
+                    href="javascript: void(0);" id="topnav-components" role="button">
+                    Rekapitulasi
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

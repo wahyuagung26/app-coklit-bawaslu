@@ -1,0 +1,80 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-transparent">
+                <div class="card-header pt-0 d-flex justify-content-between">
+                    <h1>Daftar User </h1>
+                    <div class="d-flex justify-content-end">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label class="mr-2">Nama</label>
+                                <div class="input-group mr-2">
+                                    <input type="text" class="form-control" [(ngModel)]="filter.name"
+                                        name="name" />
+                                    <div class="input-group-append" (click)="reloadDataTable()">
+                                        <span class="input-group-text">
+                                            <em class="fa fa-search"></em>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <button type="button" class="btn btn-primary"
+                            *ngIf="authService.checkAccess('super admin|admin kecamatan|admin kabupaten')"
+                            (click)="createUser(formUser)">
+                            <em class="fa fa-plus font-size-14 align-middle mr-1"></em> Tambah User
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover" datatable [dtOptions]="dtOptions">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Username</th>
+                                <th>Telepon</th>
+                                <th>Hak Akses</th>
+                                <th [width]="75"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of listUser;">
+                                <td>{{user.no}}</td>
+                                <td class="vertical-middle">{{user.name}}</td>
+                                <td class="vertical-middle">{{user.username}}</td>
+                                <td class="vertical-middle">{{user.phone_number}}</td>
+                                <td class="vertical-middle">{{user.role}}</td>
+                                <td class="vertical-middle text-right">
+                                    <a href="javascript: void(0);" class="align-middle mr-2"
+                                        (click)="updateUser(formUser, user)" placement="left" container="body"
+                                        ngbTooltip="Ubah"
+                                        *ngIf="authService.checkAccess('super admin|admin kecamatan|admin kabupaten')">
+                                        <em class="fa fa-edit font-size-14"></em>
+                                    </a>
+                                    <a href="javascript: void(0);" class="align-middle" (click)="deleteUser(user.id)"
+                                        placement="left" container="body" ngbTooltip="Hapus"
+                                        *ngIf="authService.checkAccess('super admin|admin kecamatan|admin kabupaten')">
+                                        <em class="fa fa-trash font-size-14"></em>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #formUser let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0">{{titleModal}}</h5>
+        <button type="button" class="close" (click)="modal.close()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-form-user [userId]="userId" (afterSave)="modal.close(); reloadDataTable()"></app-form-user>
+    </div>
+</ng-template>

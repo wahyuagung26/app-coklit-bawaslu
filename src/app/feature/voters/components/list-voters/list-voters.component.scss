@@ -1,0 +1,219 @@
+#table-list-voter th,
+#table-list-voter td {
+	min-width: 100px;
+}
+
+#table-list-voter thead th {
+	background: #f6f6f6;
+}
+
+#table-list-voter tbody td {
+	background: #fbfbfb;
+}
+
+#btn-add {
+	margin-top: -10px;
+}
+
+.text-bold {
+	font-weight: bolder;
+}
+
+.modal-title {
+	text-transform: capitalize;
+}
+
+.modal-title {
+	color: #263238;
+	font-weight: 600;
+}
+
+.modal.right .modal-dialog {
+	max-width: 425px;
+	right: -320px;
+	margin-right: 0px;
+	-webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+	-moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+	-o-transition: opacity 0.3s linear, right 0.3s ease-out;
+	transition: opacity 0.3s linear, right 0.3s ease-out;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.modal.right.in .modal-dialog {
+	right: 0;
+	position: fixed;
+	margin: -1px;
+}
+
+.full-height .modal-content {
+	height: 100vh;
+	border-radius: 0;
+	padding: 0 10px;
+    flex: inherit;
+}
+
+.full-height .modal-content .modal-footer {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	padding: 15px;
+	left: 0px;
+	border-top: 1px solid #e5e5e5;
+}
+
+.full-height .modal-content .modal-body {
+    height: calc(100vh - 142px);
+    overflow-y: scroll;
+    flex: inherit;
+}
+
+body.modal-open {
+	overflow: hidden;
+}
+
+body.modal-open .content-body {
+	padding-bottom: 0px !important;
+}
+
+@media only screen and (max-width: 480px) {
+	body.modal-open .body {
+		height: 100vh;
+	}
+
+	.modal.right .modal-dialog {
+		bottom: -320px;
+		-webkit-transition: opacity 0.3s linear, bottom 0.3s ease-out;
+		-moz-transition: opacity 0.3s linear, bottom 0.3s ease-out;
+		-o-transition: opacity 0.3s linear, bottom 0.3s ease-out;
+		transition: opacity 0.3s linear, bottom 0.3s ease-out;
+	}
+
+	.modal.right.in .modal-dialog {
+		position: fixed;
+		bottom: 0;
+	}
+
+	.modal.right .modal-dialog {
+		width: 100%;
+		margin: 0px !important;
+	}
+
+	.modal-content.full-height {
+		top: calc(100vh - 70vh);
+	}
+
+	.modal-content.full-height .modal-body {
+		height: calc(70vh - 122px);
+	}
+
+	.modal-content.full-height .modal-footer {
+		position: fixed;
+	}
+}
+
+.counter {
+	display: flex;
+	flex-direction: row;
+}
+
+.counter span {
+	flex: 1;
+}
+
+.counter.border {
+	border: none !important;
+	border-left: 1px solid #e2e2e2 !important;
+	border-right: 1px solid #e2e2e2 !important;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+	background-color: #f4f4f4;
+}
+
+#footer {
+	background: #dab96b;
+	position: fixed;
+	bottom: 0px;
+	padding: 15px;
+	right: 0px;
+	width: 100%;
+}
+
+.page-title {
+	text-transform: capitalize;
+}
+
+// CUSTOM NGX DATATBALE
+
+.datatable-row-odd .datatable-row-left {
+	background: #eee !important;
+}
+
+.ngx-datatable.material .datatable-header .datatable-row-left,
+.ngx-datatable.material .datatable-body .datatable-row-left {
+	border-right: 2px solid #e0e0e0;
+	background-image: none;
+}
+
+.ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell {
+	border-bottom: 2px solid #e0e0e0;
+}
+
+
+.ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+    background: #cecece;
+}
+
+.ngx-datatable.material .datatable-header .datatable-header-cell .datatable-header-cell-wrapper {
+    font-size: 0.9rem;
+    color: #4f4f4f;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 480px) {
+	.counter.border {
+		border-left: none !important;
+		border-right: none !important;
+	}
+
+    #btn-add {
+        margin-bottom: 15px;
+    }
+
+    #form-filter-button button {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}
+
+#show-per-page {
+    width: 75px;
+}
+
+#per-page-container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.per-page {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 15px;
+}
+
+.header-checkbox .datatable-header-cell-template-wrap, .header-checkbox .form-check-label {
+    font-size: 0.9rem;
+    color: #4f4f4f;
+    font-weight: 600;
+}
+
+// ngx-datatable {
+// max-height: 70vh;
+// overflow-y: scroll;
+// }
+
+// .datatable {
+// height: calc(100vh - 110px);
+// }

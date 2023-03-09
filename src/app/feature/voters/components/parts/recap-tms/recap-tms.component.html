@@ -1,0 +1,73 @@
+<div class="table-responsive table-scroll">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col" rowspan="2" class="col-name">Desa / Kel.</th>
+                <th scope="col" rowspan="2" class="col-name" *ngIf="showDistrict()">Kecamatan</th>
+                <th scope="col" rowspan="2" class="text-center">TPS</th>
+                <th scope="col" colspan="2" class="text-center">Tidak Dikenal</th>
+                <th scope="col" colspan="2" class="text-center">Meninggal</th>
+                <th scope="col" colspan="2" class="text-center">Ganda</th>
+                <th scope="col" colspan="2" class="text-center">Belum Cukup Umur</th>
+                <th scope="col" colspan="2" class="text-center">TNI</th>
+                <th scope="col" colspan="2" class="text-center">POLRI</th>
+                <th scope="col" rowspan="2" class="text-center">Total</th>
+            </tr>
+            <tr>
+                <th scope="col" class="col-2 text-center">L</th>
+                <th scope="col" class="col-2 text-center">P</th>
+                <th scope="col" class="col-2 text-center">L</th>
+                <th scope="col" class="col-2 text-center">P</th>
+                <th scope="col" class="col-2 text-center">L</th>
+                <th scope="col" class="col-2 text-center">P</th>
+                <th scope="col" class="col-2 text-center">L</th>
+                <th scope="col" class="col-2 text-center">P</th>
+                <th scope="col" class="col-2 text-center">L</th>
+                <th scope="col" class="col-2 text-center">P</th>
+                <th scope="col" class="col-2 text-center">L</th>
+                <th scope="col" class="col-2 text-center">P</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let val of list">
+                <td class="col-name">{{val?.village_name}}</td>
+                <td class="col-name" *ngIf="showDistrict()">{{val?.district_name}}</td>
+                <td class="col-name" *ngIf="">{{val?.district_name}}</td>
+                <td class="text-center angka">{{val.tps}}</td>
+                <td class="text-center angka">{{val.unknown_m}}</td>
+                <td class="text-center angka">{{val.unknown_f}}</td>
+                <td class="text-center angka">{{val.pass_away_m}}</td>
+                <td class="text-center angka">{{val.pass_away_f}}</td>
+                <td class="text-center angka">{{val.double_m}}</td>
+                <td class="text-center angka">{{val.double_f}}</td>
+                <td class="text-center angka">{{val.minor_m}}</td>
+                <td class="text-center angka">{{val.minor_f}}</td>
+                <td class="text-center angka">{{val.tni_m}}</td>
+                <td class="text-center angka">{{val.tni_f}}</td>
+                <td class="text-center angka">{{val.polri_m}}</td>
+                <td class="text-center angka">{{val.polri_f}}</td>
+                <td class="text-center angka font-weight-bold">{{val.total}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="font-weight-bold"></td>
+                <td class="font-weight-bold" *ngIf="showDistrict()"></td>
+                <td class="text-right font-weight-bold">Total</td>
+                <td class="text-center font-weight-bold">{{total.unknown_m}}</td>
+                <td class="text-center font-weight-bold">{{total.unknown_f}}</td>
+                <td class="text-center font-weight-bold">{{total.pass_away_m}}</td>
+                <td class="text-center font-weight-bold">{{total.pass_away_f}}</td>
+                <td class="text-center font-weight-bold">{{total.double_m}}</td>
+                <td class="text-center font-weight-bold">{{total.double_f}}</td>
+                <td class="text-center font-weight-bold">{{total.minor_m}}</td>
+                <td class="text-center font-weight-bold">{{total.minor_f}}</td>
+                <td class="text-center font-weight-bold">{{total.tni_m}}</td>
+                <td class="text-center font-weight-bold">{{total.tni_f}}</td>
+                <td class="text-center font-weight-bold">{{total.polri_m}}</td>
+                <td class="text-center font-weight-bold">{{total.polri_f}}</td>
+                <td class="text-center font-weight-bold">{{total.grand_total}}</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

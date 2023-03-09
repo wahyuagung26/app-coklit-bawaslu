@@ -1,0 +1,69 @@
+<form>
+    <div class="form-group row">
+        <label class="col-md-4 required">Nama</label>
+        <div class="col-md-8">
+            <input [(ngModel)]="formModel.name" type="text" name="name" class="form-control"
+                placeholder="Nama Pengguna">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-4 required">Username</label>
+        <div class="col-md-8">
+            <input [(ngModel)]="formModel.username" type="text" name="username" class="form-control"
+                placeholder="Username Pengguna">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-4">No. Telepon / HP</label>
+        <div class="col-md-8">
+            <input [(ngModel)]="formModel.phone_number" type="number" name="phone_number" class="form-control"
+                placeholder="No Telepon">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-4">Password</label>
+        <div class="col-md-8">
+            <input [(ngModel)]="formModel.password" type="password" name="password" class="form-control"
+                placeholder="Password">
+            <small class="form-text text-muted" *ngIf="activeMode == MODE_UPDATE">Kosongi password jika tidak
+                diubah
+            </small>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-4 required">Hak Akses</label>
+        <div class="col-md-8">
+            <select class="form-control" name="role" [(ngModel)]="formModel.role">
+                <option *ngFor="let role of roles;" value="{{role.id}}">{{role.name}}</option>
+            </select>
+        </div>
+    </div>
+    <!-- <div class="form-group row"> -->
+    <div class="form-group row" *ngIf="formModel.role == 'admin desa' || formModel.role == 'admin kecamatan'">
+        <label class="col-md-4 required">Kecamatan</label>
+        <div class="col-md-8">
+            <select class="form-control" name="district_id" [(ngModel)]="formModel.district_id"
+                (change)="getVillages(formModel.district_id)" disabled="{{userLogin?.role == 'admin kecamatan'}}">
+                <option *ngFor="let district of districts;" value="{{district.id}}">
+                    {{district.district_name}}
+                </option>
+            </select>
+        </div>
+    </div>
+    <!-- <div class="form-group row"> -->
+    <div class="form-group row" *ngIf="formModel.role == 'admin desa'">
+        <label class="col-md-4 required">Desa / Kelurahan</label>
+        <div class="col-md-8">
+            <select class="form-control" name="village_id" [(ngModel)]="formModel.village_id">
+                <option *ngFor="let village of villages;" value="{{village.id}}">{{village.village_name}}
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-4"></label>
+        <div class="col-md-8 text-right">
+            <button type="submit" class="btn btn-primary" (click)="save()"><em class="fa fa-save"></em> Simpan</button>
+        </div>
+    </div>
+</form>

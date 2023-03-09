@@ -1,0 +1,19 @@
+.btn-group .btn-primary {
+    color: #C62828;
+    background-color: #ffffff;
+    border-color: #C62828;
+}
+
+.btn-group .btn-primary.active {
+    color: #fff;
+    background-color: #C62828;
+    border-color: #C62828;
+}
+
+.card-footer {
+    border-top: 1px solid #eee;
+}
+
+.form-control:disabled, .form-control[readonly] {
+    background-color: #f4f4f4;
+}

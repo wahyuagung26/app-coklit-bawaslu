@@ -1,0 +1,33 @@
+<div class="table-responsive table-scroll">
+    <table class="table table-stripped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Desa / Kel.</th>
+                <th scope="col" *ngIf="showDistrict()">Kecamatan</th>
+                <th scope="col" class="text-center">TPS</th>
+                <th scope="col" class="text-center">Laki-Laki</th>
+                <th scope="col" class="text-center">Perempuan</th>
+                <th scope="col" class="text-center">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let val of list">
+                <td>{{val.village_name}}</td>
+                <td *ngIf="showDistrict()">{{val.district_name}}</td>
+                <td class="text-center">{{val.tps}}</td>
+                <td class="text-center">{{val.total_male | number}}</td>
+                <td class="text-center">{{val.total_female | number}}</td>
+                <td class="font-weight-bold text-center">{{val.total | number}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="font-weight-bold text-right" *ngIf="!showDistrict()">Total</td>
+                <td colspan="3" class="font-weight-bold text-right" *ngIf="showDistrict()">Total</td>
+                <td class="font-weight-bold text-center">{{grandTotalMale | number}}</td>
+                <td class="font-weight-bold text-center">{{grandTotalFemale | number}}</td>
+                <td class="font-weight-bold text-center">{{grandTotal | number}}</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
